@@ -29,21 +29,25 @@
         .data {
             width: 30%;
         }
-
-        .modifier {
-            background-color: rgb(47 202 38);
+        
+        .annuler {
+            background-color: rgb(255 0 0 / 66%);
             border: none;
             color: #FFF;
             transition: .3s;
             border-radius: 30px;
-            width: 100%;
+            width: 250px;
             height: 40px;
         }
         
-        .modifier:hover{
+        .annuler:hover{
             background-color: #FFF;
-            color: rgb(47 202 38);
-            border: 1px solid rgb(47 202 38);
+            color: rgb(255 0 0 / 66%);
+            border: 1px solid rgb(255 0 0 / 66%);
+        }
+
+        .annulertxt {
+            padding: 10px 0px 0px 87px;
         }
     </style>
     
@@ -89,9 +93,14 @@
                     <div class="textDescri"><?php echo $detailBesoin[0]['description'] ?></div>
                 </div>
                 <div class="validation">
-                    <a href="<?php echo base_url('besoin/C_Besoin/pageAddQuestion/'.$detailBesoin[0]['idbesoin']) ?>">
-                        <button class="modifier">VALIDER DEMANDE</button>
-                    </a>
+                    <div>
+                        <input  type="submit" value="CONFIRMER">
+                    </div>
+                    <div>
+                        <a href="<?php echo base_url('besoin/C_Besoin/pageAddQuestion')?>">
+                            <div class="annuler"><div class="annulertxt">ANNULER</div></div>
+                        </a>
+                    </div>
                 </div>
         </div>
     </div>
