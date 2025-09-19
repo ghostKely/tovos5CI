@@ -120,9 +120,8 @@ class C_Besoin extends CI_Controller {
         $data['pageTitle'] = "Détails Besoins";                                 //titre de la page de destination
         $data['pageToLoad'] = "besoin/Besoin_DetailManager";                    //path de a page de destination
 
-        $condition = ['idbesoin' => $idBesoin];        
-
-        $data['detailBesoin'] = $this->dao->select_where($detailPage['view'], $condition);     //liste des besoins non valide
+        $condition = ['idbesoin' => $idBesoin];                                                 //condition pour avoir le detail d'un besoin
+        $data['detailBesoin'] = $this->dao->select_where($detailPage['view'], $condition);      //liste des besoins non valide
 
 		$this->load->view('home/Home', $data);                                  //page principale où on load les pages
     }    
