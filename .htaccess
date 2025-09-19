@@ -1,0 +1,30 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /  # Assurez-vous que cela pointe vers le bon chemin racine de votre projet
+
+    # Si le fichier ou le dossier demandé existe, laissez Apache y accéder directement
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirige tout vers index.php
+    RewriteRule ^(.*)$ index.php/$1 [L]
+
+</IfModule>
+
+# Gérer les erreurs 404
+ErrorDocument 404 /index.php
+
+# Protéger le fichier système .htaccess
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Protéger le fichier système config.php
+<Files config.php>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Désactiver l'affichage de l'index des répertoires
+Options -Indexes   
