@@ -39,7 +39,14 @@
                         </div>
                     </a>
                 </div>
-           
+
+            <a href="<?php echo base_url('userLogin/C_User/inscriptionAs/10')?>">
+                <div class="boutonnavbar">
+                    <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
+                    <span class="link-text">Inscription</span>
+                </div>
+            </a>           
+
         </div>
     </div>
     
