@@ -81,20 +81,22 @@ class C_Besoin extends CI_Controller {
         redirect('besoin/C_Besoin/page_AjoutBesoin');                   //redirection vers la fonction page_AjoutBesoin
     }
 
+    
 /*  ========================================================================================================================== A PROPOS DE LISTER LES DEMNDES DE BESOINS*/
-/* FONCTION POUR AVOIR LA LISTE DES BESOINS ENCORE NON VALIDER 
-    ARGUMENTS : 
-        - $checkValidation (tableau) : 
-            .case 0 : champ vide            => message : Veiullez remplir tous les champs !
-            .case 1 : insertion réussie     => message : Votre demande a été enregistrée !
-            .case 2 : insertion raté        => message : Votre demande a echoué !
-            .case 3 : redirection de page   => message : Aucun message
-            .case 4 : insertion de validation de demande ratée => message : Date Invalide!
-*/
-    public function getListeBesoinNonValide($checkValidation = 3){
+/* FONCTION POUR AVOIR LA LISTE DES BESOINS ENCORE NON VALIDER */
+    public function getListeBesoin(){
         $data['pageTitle'] = "Liste Besoins";                       //titre de la page de destination
         $data['pageToLoad'] = "besoin/Besoin_List";                 //path de a page de destination
-        $data['checkValidation'] = $checkValidation;                //tableau contenant int de validation avec le message qui lui correspond
+        
+        $data['listeBesoin'] = $this->dao->select_all("v_besoin");        //liste des besoins non valide
+        
+		$this->load->view('home/Home', $data);                                      //page principale où on load les pages
+    }
+
+/* FONCTION POUR AVOIR LA LISTE DES BESOINS ENCORE NON VALIDER */
+    public function getListeBesoinNonValide(){
+        $data['pageTitle'] = "Liste Besoins";                       //titre de la page de destination
+        $data['pageToLoad'] = "besoin/Besoin_List";                 //path de a page de destination
         
         $data['listeBesoin'] = $this->dao->select_all("v_besoinnonvalide");        //liste des besoins non valide
         
@@ -102,16 +104,25 @@ class C_Besoin extends CI_Controller {
     }
 
 /* ========================================================================================================================== A PROPOS DE VALIDATION DE BESOINS PAR RH */
-/* FONCTION POUR AVOIR LES DETAILS D'UNE DEMANDE DE BESOIN SUR UN MATERIEL 
-    ARGUMENT :
-        - $id_materiel : id du matériel pour lequel on veut voir les détails des demandes
-*/
-    public function getDetailBesoin($idBesoin) {
-        $data['pageTitle'] = "Détails Besoins";                                 //titre de la page de destination
-        $data['pageToLoad'] = "besoin/Besoin_Detail";                           //path de a page de destination
+/* FOCNTION POUR SAVOIR SI ON A BESOIN DE DETAIL DE MANAGER/RH/DG */
+    public function getDetailUser() {
+        $logValue = $this->session->userdata('logValue');       //valeur de log 1/2/3
+        if ($logValue == 1) {                                                   //1 => manager
+            $pagedetailBesoin['view'] = "v_besoinsansquestion";                 //1 => view v_besoin pour la liste des besoins sans question
+            return $pagedetailBesoin;   
+        }
+    }
 
-        $condition = ['idbesoin' => $idBesoin];
-        $data['detailBesoin'] = $this->dao->select_where("v_besoinnonvalide", $condition);     //liste des besoins non valide
+/* FONCTION POUR AVOIR LES DETAILS D'UNE DEMANDE DE BESOIN SUR UN MATERIEL */
+    public function getDetailBesoin($idBesoin) {
+        $detailPage = $this->getDetailUser();                                   //pour avoir la view et la page à load pour le manager
+
+        $data['pageTitle'] = "Détails Besoins";                                 //titre de la page de destination
+        $data['pageToLoad'] = "besoin/Besoin_DetailManager";                    //path de a page de destination
+
+        $condition = ['idbesoin' => $idBesoin];        
+
+        $data['detailBesoin'] = $this->dao->select_where($detailPage['view'], $condition);     //liste des besoins non valide
 
 		$this->load->view('home/Home', $data);                                  //page principale où on load les pages
     }    

@@ -2,12 +2,8 @@ drop database tovos5;
 CREATE DATABASE tovos5;
 \c tovos5;
 
--- =====================
--- Côté candidat
--- =====================
+
 CREATE SEQUENCE seq_diplome START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_candidat START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_candidatrefuse START WITH 1 INCREMENT BY 1;
 
 -- Table Diplome
 CREATE TABLE Diplome(
@@ -17,29 +13,6 @@ CREATE TABLE Diplome(
    PRIMARY KEY(id_diplome)
 );
 
--- Table Candidat
-CREATE TABLE Candidat(
-   idCandidat VARCHAR(50) DEFAULT 'CDDT' || LPAD(NEXTVAL('seq_candidat')::text, 6, '0'),
-   email VARCHAR(250) UNIQUE,
-   nom VARCHAR(500) NOT NULL,
-   prenom VARCHAR(500) NOT NULL,
-   adresse VARCHAR(250) NOT NULL,
-   dtn DATE NOT NULL,   
-   id_diplome VARCHAR(50),
-   renseignement VARCHAR(500),
-   totalAnne_experience INT DEFAULT 0,
-   datePostulation DATE DEFAULT CURRENT_DATE,
-   PRIMARY KEY(idCandidat),
-   FOREIGN KEY(id_diplome) REFERENCES Diplome(id_diplome)
-);
-
--- Table Candidat refuse
-CREATE TABLE CandidatRefuse (
-   idCandidatRefuse VARCHAR(50) DEFAULT 'RFS' || LPAD(NEXTVAL('seq_candidatrefuse')::text, 6, '0'),
-   idCandidat VARCHAR(50) UNIQUE NOT NULL,
-   libelle_etape VARCHAR(100),
-   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
-);
 
 -- =====================
 -- Côté manager
@@ -75,32 +48,13 @@ CREATE TABLE RH(
 
 -- =====================
 -- Gestion annonce
-CREATE SEQUENCE seq_question START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_reponse START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_departement START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_poste START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_contrat START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_besoin START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_question START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_reponse START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_annonce START WITH 1 INCREMENT BY 1;
-
--- Table Question
-CREATE TABLE Question(
-   idQuestion VARCHAR(50) DEFAULT 'QSTN' || LPAD(NEXTVAL('seq_question')::text, 6, '0'),
-   question TEXT NOT NULL UNIQUE,
-   PRIMARY KEY(idQuestion)
-);
-
--- Table Reponse
-CREATE TABLE Reponse(
-   idReponse VARCHAR(50) DEFAULT 'RPNS' || LPAD(NEXTVAL('seq_reponse')::text, 6, '0'),
-   reponse VARCHAR(500),
-   choix VARCHAR(50),
-   vraiFaux BOOLEAN,
-   barem INT,
-   idQuestion VARCHAR(50),
-   PRIMARY KEY(idReponse),
-   FOREIGN KEY(idQuestion) REFERENCES Question(idQuestion)
-);
 
 -- Table Departement
 CREATE TABLE Departement(
@@ -116,15 +70,6 @@ CREATE TABLE Poste(
    id_departement VARCHAR(50) NOT NULL,
    PRIMARY KEY(idPoste),
    FOREIGN KEY(id_departement) REFERENCES Departement(id_departement)
-);
-
--- Association question et poste (il y a +sieurs questions pour un poste)
-CREATE TABLE question_poste(
-   idQuestion VARCHAR(50),
-   idPoste VARCHAR(50),
-   PRIMARY KEY(idQuestion, idPoste),
-   FOREIGN KEY(idQuestion) REFERENCES Question(idQuestion),
-   FOREIGN KEY(idPoste) REFERENCES Poste(idPoste)
 );
 
 -- Table Contrat
@@ -157,9 +102,32 @@ CREATE TABLE Besoin(
 CREATE TABLE BesoinValide(
    idBesoinValide VARCHAR(50) DEFAULT 'BSNVLD' || LPAD(NEXTVAL('seq_besoin')::text, 6, '0'),
    dateValidation DATE,
+   checkRH BOOLEAN,
+   checkDG BOOLEAN,
    idBesoin VARCHAR(50) UNIQUE NOT NULL,
    PRIMARY KEY(idBesoinValide),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)
+);
+
+-- Table Question
+CREATE TABLE Question(
+   idQuestion VARCHAR(50) DEFAULT 'QSTN' || LPAD(NEXTVAL('seq_question')::text, 6, '0'),
+   question TEXT NOT NULL UNIQUE,
+   idBesoin VARCHAR(50) NOT NULL,
+   PRIMARY KEY(idQuestion),
+   FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)
+);
+
+-- Table Reponse
+CREATE TABLE Reponse(
+   idReponse VARCHAR(50) DEFAULT 'RPNS' || LPAD(NEXTVAL('seq_reponse')::text, 6, '0'),
+   reponse VARCHAR(500),
+   choix VARCHAR(50),
+   vraiFaux BOOLEAN,
+   barem INT,
+   idQuestion VARCHAR(50),
+   PRIMARY KEY(idReponse),
+   FOREIGN KEY(idQuestion) REFERENCES Question(idQuestion)
 );
 
 -- Table annonce
@@ -170,6 +138,41 @@ CREATE TABLE Annonce(
    idBesoin VARCHAR(50) NOT NULL UNIQUE,
    PRIMARY KEY(idAnnonce),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)
+);
+
+
+
+
+
+
+-- =====================
+-- Côté candidat
+-- =====================
+CREATE SEQUENCE seq_candidat START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_candidatrefuse START WITH 1 INCREMENT BY 1;
+
+-- Table Candidat
+CREATE TABLE Candidat(
+   idCandidat VARCHAR(50) DEFAULT 'CDDT' || LPAD(NEXTVAL('seq_candidat')::text, 6, '0'),
+   email VARCHAR(250) UNIQUE,
+   nom VARCHAR(500) NOT NULL,
+   prenom VARCHAR(500) NOT NULL,
+   adresse VARCHAR(250) NOT NULL,
+   dtn DATE NOT NULL,   
+   id_diplome VARCHAR(50),
+   renseignement VARCHAR(500),
+   totalAnne_experience INT DEFAULT 0,
+   datePostulation DATE DEFAULT CURRENT_DATE,
+   PRIMARY KEY(idCandidat),
+   FOREIGN KEY(id_diplome) REFERENCES Diplome(id_diplome)
+);
+
+-- Table Candidat refuse
+CREATE TABLE CandidatRefuse (
+   idCandidatRefuse VARCHAR(50) DEFAULT 'RFS' || LPAD(NEXTVAL('seq_candidatrefuse')::text, 6, '0'),
+   idCandidat VARCHAR(50) UNIQUE NOT NULL,
+   libelle_etape VARCHAR(100),
+   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
 );
 
 -- =====================
@@ -239,28 +242,28 @@ CREATE TABLE Employe(
    FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
 );
 
-select count(nomPoste) as nbreposte from poste;
-select count(question) as nbrequestion from question;
-select count(reponse) as nbrereponse from reponse;
+-- select count(nomPoste) as nbreposte from poste;
+-- select count(question) as nbrequestion from question;
+-- select count(reponse) as nbrereponse from reponse;
 
-SELECT q.idQuestion,
-       q.question
-FROM Question q
-JOIN question_poste qp ON q.idQuestion = qp.idQuestion
-JOIN Poste p ON qp.idPoste = p.idPoste
-WHERE p.nomPoste = 'Chauffeur-Livreur';
+-- SELECT q.idQuestion,
+--        q.question
+-- FROM Question q
+-- JOIN question_poste qp ON q.idQuestion = qp.idQuestion
+-- JOIN Poste p ON qp.idPoste = p.idPoste
+-- WHERE p.nomPoste = 'Chauffeur-Livreur';
 
-SELECT 
-    p.nomPoste,
-    q.idQuestion,
-    q.question,
-    r.idReponse,
-    r.reponse,
-    r.choix,
-    r.vraiFaux,
-    r.barem
-FROM Poste p
-JOIN question_poste qp ON p.idPoste = qp.idPoste
-JOIN Question q ON qp.idQuestion = q.idQuestion
-JOIN Reponse r ON q.idQuestion = r.idQuestion
-WHERE p.nomPoste = 'Gestionnaire Stock';
+-- SELECT 
+--     p.nomPoste,
+--     q.idQuestion,
+--     q.question,
+--     r.idReponse,
+--     r.reponse,
+--     r.choix,
+--     r.vraiFaux,
+--     r.barem
+-- FROM Poste p
+-- JOIN question_poste qp ON p.idPoste = qp.idPoste
+-- JOIN Question q ON qp.idQuestion = q.idQuestion
+-- JOIN Reponse r ON q.idQuestion = r.idQuestion
+-- WHERE p.nomPoste = 'Gestionnaire Stock';

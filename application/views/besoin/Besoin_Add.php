@@ -50,7 +50,7 @@
             </div>
             <div class="quantite">
                 <h4 class="titleMatiere">Date de demande :</h4> 
-                <input type="date" name="datedemande" class="selectMats">
+                <input type="date" name="datedemande" class="selectMats" value="<?php echo date('Y-m-d'); ?>">
                 <div class="titleMatiere"></div>
             </div>
                 <input type="hidden" name="multipleInsertion" class="selectMats" value="false">
