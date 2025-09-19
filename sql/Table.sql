@@ -101,9 +101,11 @@ CREATE TABLE Besoin(
 -- Table Besoin Valide
 CREATE TABLE BesoinValide(
    idBesoinValide VARCHAR(50) DEFAULT 'BSNVLD' || LPAD(NEXTVAL('seq_besoin')::text, 6, '0'),
-   dateValidation DATE,
-   checkRH BOOLEAN,
-   checkDG BOOLEAN,
+   dateValidationRH DATE,
+   checkRH BOOLEAN DEFAULT FALSE,
+   dateValidationDG DATE,
+   checkDG BOOLEAN DEFAULT FALSE,
+   statutPostulation BOOLEAN DEFAULT FALSE,
    idBesoin VARCHAR(50) UNIQUE NOT NULL,
    PRIMARY KEY(idBesoinValide),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)

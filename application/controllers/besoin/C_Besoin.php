@@ -115,14 +115,22 @@ class C_Besoin extends CI_Controller {
 
 /* FONCTION POUR AVOIR LES DETAILS D'UNE DEMANDE DE BESOIN SUR UN MATERIEL */
     public function getDetailBesoin($idBesoin) {
-        $detailPage = $this->getDetailUser();                                   //pour avoir la view et la page à load pour le manager
-
-        $data['pageTitle'] = "Détails Besoins";                                 //titre de la page de destination
-        $data['pageToLoad'] = "besoin/Besoin_DetailManager";                    //path de a page de destination
+        $logValue = $this->session->userdata('logValue');
+        $data['pageTitle'] = "Détails Besoins";                          //titre de la page de destination
+        $data['pageToLoad'] = "besoin/Besoin_Detail_".$logValue;          //path de a page de destination
+        $detailPage = $this->getDetailUser();                            //pour avoir la view et la page à load pour le manager
 
         $condition = ['idbesoin' => $idBesoin];                                                 //condition pour avoir le detail d'un besoin
         $data['detailBesoin'] = $this->dao->select_where($detailPage['view'], $condition);      //liste des besoins non valide
 
 		$this->load->view('home/Home', $data);                                  //page principale où on load les pages
     }    
+
+/* FONCTION POUR REDIRIGER VERS L'AJOUT DE QUESTION POUR UN BESOIN */
+    public function pageAddQuestionBesoin($idBesoin) {
+        $data['pageTitle'] = "Ajout Besoin";                        //titre de la page de destination
+        $data['pageToLoad'] = "question/Question_Add";              //path de a page de destination
+
+		$this->load->view('home/Home', $data);                      //page principale où on load les pages
+    }
 }
