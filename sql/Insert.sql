@@ -14,49 +14,82 @@ INSERT INTO diplome (nomDiplome, ranking) VALUES ('LICENCE', 4);
 INSERT INTO diplome (nomDiplome, ranking) VALUES ('MASTER', 5);
 INSERT INTO diplome (nomDiplome, ranking) VALUES ('DOCTORAT', 6); 
 
--- =====================
--- Côte manager
--- =====================
--- Gestion utilisateur
--- =========================
--- Insertions pour DG
--- =====================
-INSERT INTO Dg (email, mdp) VALUES ('dg1@app.work', '1234');
-INSERT INTO Dg (email, mdp) VALUES ('dg2@app.work', '1234');
+    -- =====================
+    -- Côte manager
+    -- =====================
+    -- Gestion utilisateur
+    -- =========================
+    -- Insertions pour DG
+    -- =====================
+    INSERT INTO Dg (email, mdp) VALUES ('dg1@app.work', '1234');
+    INSERT INTO Dg (email, mdp) VALUES ('dg2@app.work', '1234');
 
--- Insertions pour Manager
-INSERT INTO Manager (email, mdp) VALUES ('manager1@app.work', '1234');
-INSERT INTO Manager (email, mdp) VALUES ('manager2@app.work', '1234');
+    -- Insertions pour Manager
+    INSERT INTO Manager (email, mdp) VALUES ('manager1@app.work', '1234');
+    INSERT INTO Manager (email, mdp) VALUES ('manager2@app.work', '1234');
 
--- Insertions pour RH
-INSERT INTO RH (email, mdp) VALUES ('rh1@app.work', '1234');
-INSERT INTO RH (email, mdp) VALUES ('rh2@app.work', '1234');
+    -- Insertions pour RH
+    INSERT INTO RH (email, mdp) VALUES ('rh1@app.work', '1234');
+    INSERT INTO RH (email, mdp) VALUES ('rh2@app.work', '1234');
 
--- =====================
--- Gestion annonce
--- =========================
--- Insertions Departement
--- =========================
-INSERT INTO Departement (nomDepartement) VALUES ('Ressources Humaines');
-INSERT INTO Departement (nomDepartement) VALUES ('Informatique');
-INSERT INTO Departement (nomDepartement) VALUES ('Finance & Comptabilite');
-INSERT INTO Departement (nomDepartement) VALUES ('Marketing');
-INSERT INTO Departement (nomDepartement) VALUES ('Commercial & Ventes');
-INSERT INTO Departement (nomDepartement) VALUES ('Production');
-INSERT INTO Departement (nomDepartement) VALUES ('Logistique');
-INSERT INTO Departement (nomDepartement) VALUES ('Juridique');
-INSERT INTO Departement (nomDepartement) VALUES ('Recherche & Developpement');
-INSERT INTO Departement (nomDepartement) VALUES ('Direction Generale');
+    -- =====================
+    -- Gestion annonce
+    -- =========================
+    -- Insertions Departement
+    -- =========================
+    INSERT INTO Departement (nomDepartement) VALUES ('Ressources Humaines');
+    INSERT INTO Departement (nomDepartement) VALUES ('Informatique');
+    INSERT INTO Departement (nomDepartement) VALUES ('Finance & Comptabilite');
+    INSERT INTO Departement (nomDepartement) VALUES ('Marketing');
+    INSERT INTO Departement (nomDepartement) VALUES ('Commercial & Ventes');
+    INSERT INTO Departement (nomDepartement) VALUES ('Production');
+    INSERT INTO Departement (nomDepartement) VALUES ('Logistique');
+    INSERT INTO Departement (nomDepartement) VALUES ('Juridique');
+    INSERT INTO Departement (nomDepartement) VALUES ('Recherche & Developpement');
+    INSERT INTO Departement (nomDepartement) VALUES ('Direction Generale');
 
--- =========================
+    -- =========================
+    -- Insertions Poste
+    -- =========================
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Charge de Recrutement', (SELECT id_departement FROM Departement WHERE nomDepartement='Ressources Humaines'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Assistant RH', (SELECT id_departement FROM Departement WHERE nomDepartement='Ressources Humaines'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Developpeur Fullstack', (SELECT id_departement FROM Departement WHERE nomDepartement='Informatique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Chef de Projet IT', (SELECT id_departement FROM Departement WHERE nomDepartement='Informatique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Comptable', (SELECT id_departement FROM Departement WHERE nomDepartement='Finance & Comptabilite'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Tresorier', (SELECT id_departement FROM Departement WHERE nomDepartement='Finance & Comptabilite'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Responsable Marketing', (SELECT id_departement FROM Departement WHERE nomDepartement='Marketing'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Charge de Communication', (SELECT id_departement FROM Departement WHERE nomDepartement='Marketing'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Representant Commercial', (SELECT id_departement FROM Departement WHERE nomDepartement='Commercial & Ventes'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Assistant Commercial', (SELECT id_departement FROM Departement WHERE nomDepartement='Commercial & Ventes'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Superviseur Atelier', (SELECT id_departement FROM Departement WHERE nomDepartement='Production'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Operateur Machine', (SELECT id_departement FROM Departement WHERE nomDepartement='Production'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Gestionnaire Stock', (SELECT id_departement FROM Departement WHERE nomDepartement='Logistique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Chauffeur-Livreur', (SELECT id_departement FROM Departement WHERE nomDepartement='Logistique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Avocat Interne', (SELECT id_departement FROM Departement WHERE nomDepartement='Juridique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Conseiller Juridique', (SELECT id_departement FROM Departement WHERE nomDepartement='Juridique'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Analyste Innovation', (SELECT id_departement FROM Departement WHERE nomDepartement='Recherche & Developpement'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Technicien de Laboratoire', (SELECT id_departement FROM Departement WHERE nomDepartement='Recherche & Developpement'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Secretaire de Direction', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
+    INSERT INTO Poste (nomPoste, id_departement) VALUES ('Conseiller Strategique', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
+
+-- Insertions pour la table Contrat
+INSERT INTO Contrat (typeContrat, abreviation) VALUES 
+('Contrat a Duree Indeterminee', 'CDI'),
+('Contrat a Duree Determinee', 'CDD'),
+('Contrat de Stage', 'STG'),
+('Contrat d''Apprentissage', 'APP'),
+('Contrat de Freelance', 'FRL');
+
+
+
+
 -- Insertions Postes
 -- =========================
 -- Ressources Humaines
 -- =========================
 -- Poste : Charge de Recrutement
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Charge de Recrutement', (SELECT id_departement FROM Departement WHERE nomDepartement='Ressources Humaines'));
--- =========================
+
 -- Questions pour Charge de Recrutement
 -- =========================
 -- Question 1
@@ -117,9 +150,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel type d''entretien 
 -- =========================
 -- Poste : Assistant RH
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Assistant RH', (SELECT id_departement FROM Departement WHERE nomDepartement='Ressources Humaines'));
--- =========================
--- Questions pour Assistant RH
+ions pour Assistant RH
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Assistant RH ?');
@@ -182,9 +213,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Comment l''Assistant RH
 -- =========================
 -- Poste : Developpeur Fullstack
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Developpeur Fullstack', (SELECT id_departement FROM Departement WHERE nomDepartement='Informatique'));
--- =========================
--- Questions pour Developpeur Fullstack
+stions pour Developpeur Fullstack
 -- Poste : Developpeur Fullstack
 -- =========================
 -- Question 1
@@ -245,9 +274,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel outil est utilise 
 -- =========================
 -- Poste : Chef de Projet IT
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Chef de Projet IT', (SELECT id_departement FROM Departement WHERE nomDepartement='Informatique'));
--- =========================
--- Questions pour Chef de Projet IT
+ns pour Chef de Projet IT
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Chef de Projet IT ?');
@@ -311,9 +338,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel indicateur permet 
 -- =========================
 -- Poste : Comptable
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Comptable', (SELECT id_departement FROM Departement WHERE nomDepartement='Finance & Comptabilite'));
--- =========================
--- Questions pour Comptable
+ions pour Comptable
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un comptable ?');
@@ -373,9 +398,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle tâche relève d
 -- =========================
 -- Poste : Tresorier
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Tresorier', (SELECT id_departement FROM Departement WHERE nomDepartement='Finance & Comptabilite'));
--- =========================
--- Questions pour Tresorier
+ions pour Tresorier
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Tresorier ?');
@@ -439,9 +462,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle tâche quotidien
 -- =========================
 -- Poste : Responsable Marketing
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Responsable Marketing', (SELECT id_departement FROM Departement WHERE nomDepartement='Marketing'));
--- =========================
--- Questions pour Responsable Marketing
+ons pour Responsable Marketing
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Responsable Marketing ?');
@@ -501,9 +522,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle tâche relève d
 -- =========================
 -- Poste : Charge de Communication
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Charge de Communication', (SELECT id_departement FROM Departement WHERE nomDepartement='Marketing'));
--- =========================
--- Questions pour Charge de Communication
+tions pour Charge de Communication
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Charge de Communication ?');
@@ -566,8 +585,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle tâche relève d
 -- =========================
 -- Poste : Representant Commercial
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Representant Commercial', (SELECT id_departement FROM Departement WHERE nomDepartement='Commercial & Ventes'));
--- =========================
+==
 -- Questions pour Representant Commercial
 -- =========================
 -- Question 1
@@ -627,8 +645,6 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel outil est utilise 
 
 -- =========================
 -- Poste : Assistant Commercial
--- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Assistant Commercial', (SELECT id_departement FROM Departement WHERE nomDepartement='Commercial & Ventes'));
 -- =========================
 -- Questions pour Assistant Commercial
 -- =========================
@@ -693,9 +709,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel type de rapport un
 -- =========================
 -- Poste : Superviseur Atelier
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Superviseur Atelier', (SELECT id_departement FROM Departement WHERE nomDepartement='Production'));
--- =========================
--- Questions pour Superviseur Atelier
+ns pour Superviseur Atelier
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Superviseur Atelier ?');
@@ -755,9 +769,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel type de rapport un
 -- =========================
 -- Poste : Operateur Machine
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Operateur Machine', (SELECT id_departement FROM Departement WHERE nomDepartement='Production'));
--- =========================
--- Questions pour Operateur Machine
+ pour Operateur Machine
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quelle est la principale responsabilite d''un Operateur Machine ?');
@@ -821,9 +833,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Que doit faire un Opera
 -- =========================
 -- Poste : Gestionnaire Stock
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Gestionnaire Stock', (SELECT id_departement FROM Departement WHERE nomDepartement='Logistique'));
--- =========================
--- Questions pour Gestionnaire Stock
+s pour Gestionnaire Stock
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quelle est la principale responsabilite d''un Gestionnaire Stock ?');
@@ -884,9 +894,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Que doit faire un Gesti
 -- =========================
 -- Poste : Chauffeur-Livreur
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Chauffeur-Livreur', (SELECT id_departement FROM Departement WHERE nomDepartement='Logistique'));
--- =========================
--- Questions pour Chauffeur-Livreur
+ pour Chauffeur-Livreur
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Chauffeur-Livreur ?');
@@ -949,9 +957,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle règle de securi
 -- =========================
 -- Poste : Avocat Interne
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Avocat Interne', (SELECT id_departement FROM Departement WHERE nomDepartement='Juridique'));
--- =========================
--- Questions pour Avocat Interne
+r Avocat Interne
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Avocat Interne ?');
@@ -1012,9 +1018,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel document est essen
 -- =========================
 -- Poste : Conseiller Juridique
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Conseiller Juridique', (SELECT id_departement FROM Departement WHERE nomDepartement='Juridique'));
--- =========================
--- Questions pour Conseiller Juridique
+ns pour Conseiller Juridique
 -- =========================
 -- Question 1
 INSERT INTO Question (question) VALUES ('Quel est le rôle principal d''un Conseiller Juridique ?');
@@ -1078,8 +1082,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Que doit-il faire lorsq
 -- =========================
 -- Poste : Analyste Innovation
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Analyste Innovation', (SELECT id_departement FROM Departement WHERE nomDepartement='Recherche & Developpement'));
--- =========================
+====
 -- Questions pour Analyste Innovation
 -- =========================
 -- Question 1
@@ -1141,8 +1144,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel indicateur permet 
 -- =========================
 -- Poste : Technicien de Laboratoire
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Technicien de Laboratoire', (SELECT id_departement FROM Departement WHERE nomDepartement='Recherche & Developpement'));
--- =========================
+==========
 -- Questions pour Technicien de Laboratoire
 -- =========================
 -- Question 1
@@ -1206,8 +1208,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quel est l''objectif pr
 -- =========================
 -- Poste : Secretaire de Direction
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Secretaire de Direction', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
--- =========================
+=
 -- Questions pour Secretaire de Direction
 -- =========================
 -- Question 1
@@ -1269,8 +1270,7 @@ VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle qualite est la p
 -- =========================
 -- Poste : Conseiller Strategique
 -- =========================
-INSERT INTO Poste (nomPoste, id_departement) VALUES ('Conseiller Strategique', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
--- =========================
+
 -- Questions pour Conseiller Strategique
 -- =========================
 -- Question 1
@@ -1328,10 +1328,3 @@ INSERT INTO Reponse (reponse, choix, vraiFaux, idQuestion) VALUES
 INSERT INTO question_poste (idQuestion, idPoste)
 VALUES ((SELECT idQuestion FROM Question WHERE question='Quelle qualite est la plus importante pour un Conseiller Strategique ?'), (SELECT idPoste FROM Poste WHERE nomPoste='Conseiller Strategique'));
 
--- Insertions pour la table Contrat
-INSERT INTO Contrat (typeContrat, abreviation) VALUES 
-('Contrat à Duree Indeterminee', 'CDI'),
-('Contrat à Duree Determinee', 'CDD'),
-('Contrat de Stage', 'STG'),
-('Contrat d''Apprentissage', 'APP'),
-('Contrat de Freelance', 'FRL');

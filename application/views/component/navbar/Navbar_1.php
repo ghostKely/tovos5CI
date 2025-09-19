@@ -26,7 +26,7 @@
                             <span class="link-text">Ajout</span>
                         </div>
                     </a>
-                    <a href="<?php echo base_url('besoin/C_Besoin/liste_besoins')?>">
+                    <a href="<?php echo base_url('besoin/C_Besoin/getListeBesoin/')?>">
                         <div class="boutonnavbar">
                             <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
                             <span class="link-text">Liste</span>
