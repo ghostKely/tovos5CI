@@ -104,6 +104,8 @@ class C_Question extends CI_Controller {
         redirect('besoin/C_Besoin/getListeBesoin'); 
     }
 
+    // fonction pour montrer le QCM 
+
     public function showQuestionForAnnounce($idBesoin){
         $data['pageTitle'] = "QCM";                      
         $data['pageToLoad'] = "question/QCM";              
@@ -148,6 +150,8 @@ class C_Question extends CI_Controller {
     
         // Step 2: Pass the nested array to the view
         $data['questions'] = $questions;
+
+        $data['idbesoin'] = $idBesoin;
     
         // Debug
         // var_dump($data['questions']);
@@ -155,7 +159,58 @@ class C_Question extends CI_Controller {
         $this->load->view('home/Home', $data);
     }
     
-    
-    
+    // Fonction qui calcul le score total par QCM pour chaque candidat pour chaque annonce
 
+    public function showScore(){
+        $selectedAnswers = $this->input->post('choixreponse'); 
+
+        $selectedIds = array_values($selectedAnswers); //extrait les valeur venant des radios = réponses
+
+        $answers = $this->dao->select_where_in('reponse', 'idreponse', $selectedIds);
+
+        //Calcul de note
+        $note = 0;
+        foreach ($answers as $a) {
+            if ($a['vraifaux'] == 't') {
+                $note++;
+            }
+        }
+
+        //fetch de l'id annonce
+        $conditions = [
+            'idbesoin' => $this->input->post('idbesoin')
+        ];
+        $idannonce = $this->dao->select_where('annonce', $conditions);
+
+        //avoir la date par défaut du remplissage du qcm
+        $date = $this->input->post('today');
+
+        //avoir le userdata de la personne actuellement connecté
+        $candidat = $this->session->userdata('connectedUser');
+
+        if($candidat == null){
+            redirect('C_Home');
+        }else{
+            // prendre l'id du candidat
+            $idcandidat = $candidat['idcandidat'];
+
+            // À insérer dans la table noteqcm
+            $to_insert = [
+                'note' => $note,
+                'idannonce' => $idannonce[0]['idannonce'],
+                'dateqcm' => $date,
+                'idcandidat' => $idcandidat
+            ];
+
+            $check = $this->dao->insert_into('noteqcm', $to_insert);
+
+            if($check != null){
+                redirect('annonce/C_Annonce/getListeAnnonce');
+            }else{
+                redirect('C_Home');
+            }
+        }
+
+    }
+    
 }

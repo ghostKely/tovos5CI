@@ -94,9 +94,15 @@
                     <div class="textDescri"><?php echo $detailAnnonce[0]['description'] ?></div>
                 </div>
                 <div class="validation">
-                    <a href="<?php echo base_url('userLogin/C_User/loginAsCandidat/10') ?>">
-                        <button class="modifier">POSTULER</button>
-                    </a>
+                    <?php if($this->session->has_userdata('connectedUser')): ?>
+                        <a href="<?php echo base_url('besoin/C_Question/showQuestionForAnnounce/'.$detailAnnonce[0]['idbesoin']) ?>">
+                            <button class="modifier">POSTULER</button>
+                        </a>
+                    <?php else: ?>
+                        <a href="<?php echo base_url('userLogin/C_User/loginAsCandidat/10') ?>">
+                            <button class="modifier">SIGN IN</button>
+                        </a>
+                    <?php endif; ?>
                 </div>
         </div>
     </div>

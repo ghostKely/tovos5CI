@@ -27,7 +27,7 @@
                             <div class="answer-item">
                                 <label>
                                     <input type="radio" 
-                                        name="<?= $question['idquestion'] ?>" 
+                                        name="choixreponse[<?= $question['idquestion'] ?>]"
                                         value="<?= $answer['idreponse'] ?>" 
                                         required>
                                     <?= $answer['reponse'] ?>
@@ -37,6 +37,8 @@
                     </div><br>
                 </div>
             <?php endforeach; ?>
+            <input type="hidden" name="idbesoin" value="<?php echo $idbesoin ?>">
+            <input type="hidden" name="today" value="<?= date('Y-m-d') ?>">
             <div class="submitButton">
                 <input type="submit" value="CONFIRMER">
             </div>
