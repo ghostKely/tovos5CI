@@ -3,7 +3,7 @@
             margin-top: 2.5%;
         }
     </style>
-    <h2>Liste des demandes de besoins</h2>
+    <h2>Liste des demandes de besoins <?php echo $titreListe; ?></h2>
     <table class="table">
         <thead class="thead-dark">
             <tr>

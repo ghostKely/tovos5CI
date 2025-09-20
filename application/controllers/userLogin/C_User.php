@@ -80,7 +80,7 @@ class C_User extends CI_Controller {
         } else {
             $this->session->set_userdata('logValue', $logAsValue);               //mise en session de la valeur de logAsValue (1/2/3) pour les navbar
             $colonne = "id".$tableUser;
-            $this->session->set_userdata('id', $userExist[0][$colonne]);           //mise en session de la valeur de id 
+            $this->session->set_userdata('id', $userExist[0][$colonne]);         //mise en session de la valeur de id 
             redirect('C_Home');
         }
     }
