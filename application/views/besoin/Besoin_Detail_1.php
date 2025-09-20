@@ -89,8 +89,8 @@
                     <div class="textDescri"><?php echo $detailBesoin[0]['description'] ?></div>
                 </div>
                 <div class="validation">
-                    <a href="<?php echo base_url('besoin/C_Besoin/pageAddQuestion/'.$detailBesoin[0]['idbesoin']) ?>">
-                        <button class="modifier">VALIDER DEMANDE</button>
+                    <a href="<?php echo base_url('besoin/C_Question/pageAddQuestionBesoin/'.$detailBesoin[0]['idbesoin']) ?>">
+                        <button class="modifier">CREER UN QUESTIONNAIRE</button>
                     </a>
                 </div>
         </div>
