@@ -1,7 +1,7 @@
-    <div class="col-md-1 url">
+<div class="col-md-1 url">
         <div class="logodiv"><img class="logo" src="<?php echo base_url('assets/image/logo.jpg'); ?>"></div>
         <div class="scroll-container">
-            <a href="<?php echo base_url('userLogin/C_User/disconnect')?>">
+            <a href="<?php echo base_url('userLogin/C_User/disconnectCandidat')?>">
                 <div class="boutonnavbar">
                     <span class="glyphicon glyphicon-th-large icon" aria-hidden="true"></span>
                     <span class="link-text">Log Out</span>
@@ -13,46 +13,12 @@
                     <span class="link-text">Home</span>
                 </div>
             </a>
-            
-            <div class="boutonnavbar" id="login" data-dropdown="dropdownMenulogin">
-                <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                <span class="link-text">Log as</span>
-                <span class="glyphicon glyphicon-menu-down down" aria-hidden="true"></span>
-            </div>
-                <div id="dropdownMenulogin" class="dropdown-content">
-                    <a href="<?php echo base_url('userLogin/C_User/loginAs/1')?>">
-                        <div class="boutonnavbar">
-                            <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                            <span class="link-text">Manager</span>
-                        </div>
-                    </a>
-                    <a href="<?php echo base_url('userLogin/C_User/loginAs/2')?>">
-                        <div class="boutonnavbar">
-                            <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                            <span class="link-text">Resp RH</span>
-                        </div>
-                    </a>
-                    <a href="<?php echo base_url('userLogin/C_User/loginAs/3')?>">
-                        <div class="boutonnavbar">
-                            <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                            <span class="link-text">DG</span>
-                        </div>
-                    </a>
-                    <a href="<?php echo base_url('userLogin/C_User/loginAsCandidat/10')?>">
-                        <div class="boutonnavbar">
-                            <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                            <span class="link-text">Candidat</span>
-                        </div>
-                    </a>
-                </div>
-
-            <a href="<?php echo base_url('userLogin/C_User/inscriptionAs/10')?>">
+            <a href="<?php echo base_url('C_Home')?>">
                 <div class="boutonnavbar">
-                    <span class="glyphicon glyphicon-user icon" aria-hidden="true"></span>
-                    <span class="link-text">Inscription</span>
+                    <span class="glyphicon glyphicon-envelope icon" aria-hidden="true"></span>
+                    <span class="link-text">Invoice</span>
                 </div>
-            </a>           
-
+            </a>
         </div>
     </div>
     

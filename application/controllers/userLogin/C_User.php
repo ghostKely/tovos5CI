@@ -32,6 +32,18 @@ class C_User extends CI_Controller {
 		$this->load->view('home/Home', $data);                  //page principale où on load les pages
     }
 
+    /* FONCTION POUR VERIFIER LES INFORMATIONS DE LOGIN
+    ARGUMENTS : 
+        .$logAsValue : determine la table dans laquelle on va verifier email et mdp
+    */
+
+    public function loginAsCandidat($logAsValue){
+        $data['pageTitle'] = "Connexion";                       //titre de la page de destination
+        $data['pageToLoad'] = "userLogin/LoginCandidat";                //path de a page de destination
+        $data['logAsValue'] = $logAsValue;                      //10
+		$this->load->view('home/Home', $data);                  //page principale où on load les pages
+    }
+
     /* FONCTION POUR S'INSCRIRE EN TANT QUE CANDIDAT
     ARGUMENTS : 
         .$logAsValue : determine la table dans laquelle on va verifier email et mdp
@@ -138,11 +150,43 @@ class C_User extends CI_Controller {
         }
     }
 
+    public function authCandidat() {
+        $email = $this->input->post('emailUser');       //recup de email de user
+        $nom = $this->input->post('nomUser');                       //recup de nom de user
+        $prenom = $this->input->post('prenomUser');                       //recup de prenom de user
+        $logAsValue = $this->input->post('logValue');               //recup de logvalue (10)
+
+        $conditions = [
+            'email' => $email,
+            'nom' => $nom,
+            'prenom' => $prenom
+        ];
+
+        $userdata = $this->dao->select_where('candidat', $conditions);
+        $user = $userdata[0];
+        
+        if (!empty($userdata)) {
+            $user = $userdata[0];
+        
+            $this->session->set_userdata('connectedUser', $user);
+            $this->session->set_userdata('logValue', $logAsValue);  
+            redirect('C_Home');
+        } else {
+            redirect('userLogin/C_User/authCandidat');
+        }
+    }
+
 /* FONCTION DE DECONNEXION 
         DETRUIT TOUTES LES DONNEES DE LA SESSION EXISTANTE
 */
     public function disconnect() {
         $this->session->unset_userdata('logValue');
+        redirect('C_Home');
+    }
+
+    public function disconnectCandidat() {
+        $this->session->unset_userdata('logValue');
+        $this->session->unset_userdata('connectedUser');
         redirect('C_Home');
     }
 
