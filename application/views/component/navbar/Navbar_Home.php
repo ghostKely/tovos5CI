@@ -52,6 +52,12 @@
                     <span class="link-text">Inscription</span>
                 </div>
             </a>           
+            <a href="<?php echo base_url('annonce/C_Annonce/getListeAnnonce')?>">
+                <div class="boutonnavbar">
+                    <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                    <span class="link-text">Liste Annonce</span>
+                </div>
+            </a>
 
         </div>
     </div>

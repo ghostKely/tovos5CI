@@ -72,13 +72,13 @@ INSERT INTO diplome (nomDiplome, ranking) VALUES ('DOCTORAT', 6);
     INSERT INTO Poste (nomPoste, id_departement) VALUES ('Secretaire de Direction', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
     INSERT INTO Poste (nomPoste, id_departement) VALUES ('Conseiller Strategique', (SELECT id_departement FROM Departement WHERE nomDepartement='Direction Generale'));
 
--- Insertions pour la table Contrat
-INSERT INTO Contrat (typeContrat, abreviation) VALUES 
-('Contrat a Duree Indeterminee', 'CDI'),
-('Contrat a Duree Determinee', 'CDD'),
-('Contrat de Stage', 'STG'),
-('Contrat d''Apprentissage', 'APP'),
-('Contrat de Freelance', 'FRL');
+    -- Insertions pour la table Contrat
+    INSERT INTO Contrat (typeContrat, abreviation) VALUES 
+    ('Contrat a Duree Indeterminee', 'CDI'),
+    ('Contrat a Duree Determinee', 'CDD'),
+    ('Contrat de Stage', 'STG'),
+    ('Contrat d''Apprentissage', 'APP'),
+    ('Contrat de Freelance', 'FRL');
 
 
 

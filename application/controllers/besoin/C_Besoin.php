@@ -131,7 +131,7 @@ class C_Besoin extends CI_Controller {
         $moyenne = $this->input->post('moyenne');                               //récupération de moyenne qui passe le QCM
         $idBesoin = $this->input->post('idbesoin');                             //récupération de id de besoin a valider
 
-        $valeurPost = array($datevalidationrh, $moyenne);                       //champs à check si vide
+        $valeurPost = array($datevalidationrh, $moyenne, $idBesoin);            //champs à check si vide
         $redirectPage = "besoin/C_Besoin/getDetailBesoin/".$idBesoin;           //page de redirection si misy vide
         $this->checkChampsVide($valeurPost, $redirectPage);                     //checking de champ vide
 
@@ -140,7 +140,7 @@ class C_Besoin extends CI_Controller {
                 'datevalidationrh' => $datevalidationrh,
                 'checkrh' => true,
                 'datevalidationdg' => null,
-                'checkdg' => null,
+                'checkdg' => false,
                 'statutpostulation' => false,
                 'idbesoin' => $idBesoin,      
                 'averagenoteqcm' => $moyenne
@@ -161,6 +161,74 @@ class C_Besoin extends CI_Controller {
     }
 
 /* ========================================================================================================================== A PROPOS DE VALIDATION DE BESOINS PAR DG */
-/* FONCTION */
-    
+/* FONCTION POUR INSERER LA VALIDATION DU DG */
+    public function insertValidationDG($datevalidationrh, $datevalidationdg, $moyenne, $checkrh, $idBesoin, $nomPoste) {
+        //creation du tableau pour la requete
+        $to_insert = [                             
+            'datevalidationrh' => $datevalidationrh,
+            'checkrh' => $checkrh,
+            'datevalidationdg' => $datevalidationdg,
+            'checkdg' => true,
+            'statutpostulation' => false,
+            'idbesoin' => $idBesoin,      
+            'averagenoteqcm' => $moyenne
+        ];
+        $checkInsert = $this->dao->insert_into('besoinvalide', $to_insert);   //retour de id de insertion si insertion réussi ($inserted != null)
+         
+        if ($checkInsert !== false) {                                    //si la valeur de $inserted n'est pas null alors insertion réussi
+            $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion réussi
+                'message' => "Succès de la validation de la demande de besoin !"        //message de validation pour page Validation.php
+                ]);
+        } else {                                                    //si la valeur de $inserted est pas null alors insertion raté                
+            $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion raté
+                'message' => "Echec de la validation de la demande de besoin !"                 //message de validation pour page Validation.php
+            ]);
+            redirect('besoin/C_Besoin/getDetailBesoin/'.$idBesoin);
+        }
+
+        return true;
+    }
+
+/* FONCTION POUR INSERER ANNONCE APRES VALIDATION DU DG */
+    public function insertAnnonce($colonneAnnonce) {
+        $checkInsertAnnonce = $this->dao->insert_into("annonce", $colonneAnnonce);  //insertion de annonce
+        
+        if ($checkInsertAnnonce !== false) {                                    //si la valeur de $inserted n'est pas null alors insertion réussi
+            $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion réussi
+                'message' => "Succès de la validation de la demande de besoin !"        //message de validation pour page Validation.php
+                ]);
+        } else {                                                    //si la valeur de $inserted est pas null alors insertion raté                
+            $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion raté
+                'message' => "Echec de la validation de la demande de besoin !"                 //message de validation pour page Validation.php
+            ]);
+            redirect('besoin/C_Besoin/getDetailBesoin/'.$colonneAnnonce['idbesoin']);
+        }
+
+        return true;
+    }
+
+/* FONCTION POUR FAIRE LA VALIDATION DU DG ET CREATION DE ANNONCE */
+    public function saveValidationDG() {
+        $checkrh = $this->input->post('checkrh');                               //récupération de statut de validation de besoin par rh
+        $datevalidationrh = $this->input->post('datevalidationrh');             //récupération de date de validation de besoin par rh
+        $datevalidationdg = $this->input->post('datevalidationdg');             //récupération de date de validation de besoin par dg
+        $moyenne = $this->input->post('moyenne');                               //récupération de moyenne qui passe le QCM
+        $idBesoin = $this->input->post('idbesoin');                             //récupération de id de besoin a valider
+        $nomPoste = $this->input->post('nomPoste');                             //récupération de nom du poste sur annonce
+
+        $valeurPost = array($datevalidationrh, $datevalidationdg, $moyenne, $checkrh, $idBesoin, $nomPoste);  //champs à check si vide
+        $redirectPage = "besoin/C_Besoin/getDetailBesoin/".$idBesoin;           //page de redirection si misy vide
+        $this->checkChampsVide($valeurPost, $redirectPage);                     //checking de champ vide
+
+        //insertion de la validation du dge dans besoinvalide
+        $checkInsertBesoinValide = $this->insertValidationDG($datevalidationrh, $datevalidationdg, $moyenne, $checkrh, $idBesoin, $nomPoste);
+        $colonneAnnonce = [                                                      //colonne pour inserer dans la table annonce
+            'datepublication' => $datevalidationdg,
+            'titre' => "Recrutement pour le poste de ".$nomPoste,
+            'idbesoin' => $idBesoin
+        ];
+        $checkInsertAnnonce = $this->insertAnnonce($colonneAnnonce);            //insertion de annonce
+        
+        redirect('besoin/C_Besoin/getListeBesoin');                   //redirection vers la fonction page_AjoutBesoin
+    }
 }

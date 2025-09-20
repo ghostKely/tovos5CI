@@ -142,18 +142,86 @@ WHERE bv.idBesoin IS NULL;
 -- VIEW QUI DONNE LA LISTE DES BESOINS VALIDES PAR RH
 CREATE OR REPLACE VIEW v_besoindg AS
 SELECT 
+    b.idBesoin,
     b.dateBesoin,
     d.nomDepartement,
+    b.description,
     p.nomPoste,
     b.nombre_employe,
-    b.annee_experience,
+    b.annee_experience, 
     di.nomDiplome,
     c.typeContrat,
-    bv.dateValidationRH
+    c.abreviation as type_contrat_abrev,
+    bv.dateValidationRH,
+    bv.checkrh,
+    bv.checkdg,
+    bv.averagenoteqcm
 FROM BesoinValide bv
 INNER JOIN Besoin b ON bv.idBesoin = b.idBesoin
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement d ON p.id_departement = d.id_departement
 INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
 INNER JOIN Contrat c ON b.idContrat = c.idContrat
-WHERE bv.checkRH = TRUE;
+WHERE bv.checkRH = TRUE AND bv.checkDG = FALSE;
+
+--  VIEW POUR AVOIR LA DERNIERE VALIDATION POUR UN BESOIN
+CREATE OR REPLACE VIEW v_besoindg AS
+SELECT 
+    b.idBesoin,
+    b.dateBesoin,
+    d.nomDepartement,
+    b.description,
+    p.nomPoste,
+    b.nombre_employe,
+    b.annee_experience, 
+    di.nomDiplome,
+    c.typeContrat,
+    c.abreviation as type_contrat_abrev,
+    bv.dateValidationRH,
+    bv.checkrh,
+    bv.checkdg,
+    bv.averagenoteqcm
+FROM Besoin b
+INNER JOIN Poste p ON b.idPoste = p.idPoste
+INNER JOIN Departement d ON p.id_departement = d.id_departement
+INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
+INNER JOIN Contrat c ON b.idContrat = c.idContrat
+INNER JOIN (
+    SELECT DISTINCT ON (idBesoin) *
+    FROM BesoinValide
+    ORDER BY idBesoin, idBesoinValide DESC
+) bv ON b.idBesoin = bv.idBesoin
+WHERE bv.checkRH = TRUE 
+AND bv.checkDG = FALSE;
+
+-- VIEW POUR AVOIR LA LISTE DES ANNONCES
+CREATE OR REPLACE VIEW v_annonce AS
+SELECT 
+    a.idAnnonce,
+    a.titre,
+    a.datePublication,
+    p.nomPoste,
+    d.nomDiplome,
+    b.description,
+    b.nombre_employe,
+    b.annee_experience,
+    c.typeContrat,
+    c.abreviation,
+    bv.statutPostulation,
+    dep.nomDepartement,
+    bv.dateValidationRH,
+    bv.dateValidationDG,
+    bv.idBesoinValide,
+    b.idBesoin
+FROM Annonce a
+INNER JOIN Besoin b ON a.idBesoin = b.idBesoin
+INNER JOIN (
+    SELECT DISTINCT ON (idBesoin) *
+    FROM BesoinValide
+    ORDER BY idBesoin, idBesoinValide DESC
+) bv ON b.idBesoin = bv.idBesoin
+INNER JOIN Poste p ON b.idPoste = p.idPoste
+INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
+INNER JOIN Contrat c ON b.idContrat = c.idContrat
+INNER JOIN Departement dep ON p.id_departement = dep.id_departement
+WHERE bv.statutPostulation = FALSE;
