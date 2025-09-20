@@ -157,5 +157,22 @@ class Dao_model extends CI_Model{
     }
 
 
+    public function select_where_in($table, $column, $values) {
+        if (empty($values)) {
+            return []; // return empty array if no values provided
+        }
+    
+        $this->db->where_in($column, $values);
+        $query = $this->db->get($table);
+    
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return [];
+        }
+    }
+    
+
+
 
 }

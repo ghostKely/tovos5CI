@@ -104,4 +104,58 @@ class C_Question extends CI_Controller {
         redirect('besoin/C_Besoin/getListeBesoin'); 
     }
 
+    public function showQuestionForAnnounce($idBesoin){
+        $data['pageTitle'] = "QCM";                      
+        $data['pageToLoad'] = "question/QCM";              
+    
+        // Step 1: Get all rows from v_qcm for this besoin
+        $allRows = $this->dao->select_where('v_qcm', ['idbesoin' => $idBesoin]);
+    
+        $questions = [];
+    
+        foreach ($allRows as $row) {
+            $id = $row['idquestion'];
+    
+            // Initialize question if it hasn't been added yet
+            if (!isset($questions[$id])) {
+                // Include all columns from v_qcm except the answer-specific ones
+                $questions[$id] = [
+                    'idquestion' => $row['idquestion'],
+                    'question' => $row['question'],
+                    'datecreation' => $row['datecreation'],
+                    'idbesoin' => $row['idbesoin'],
+                    'nombre_employe' => $row['nombre_employe'],
+                    'besoin_description' => $row['besoin_description'],
+                    'annee_experience' => $row['annee_experience'],
+                    'datebesoin' => $row['datebesoin'],
+                    'idmanager' => $row['idmanager'],
+                    'id_diplome' => $row['id_diplome'],
+                    'idcontrat' => $row['idcontrat'],
+                    'idposte' => $row['idposte'],
+                    'answers' => []  // initialize empty array for answers
+                ];
+            }
+    
+            // Add answer if it exists
+            if (!empty($row['idreponse'])) {
+                $questions[$id]['answers'][] = [
+                    'idreponse' => $row['idreponse'],
+                    'reponse' => $row['reponse'],
+                    'vraifaux' => $row['vraifaux']
+                ];
+            }
+        }
+    
+        // Step 2: Pass the nested array to the view
+        $data['questions'] = $questions;
+    
+        // Debug
+        // var_dump($data['questions']);
+    
+        $this->load->view('home/Home', $data);
+    }
+    
+    
+    
+
 }
