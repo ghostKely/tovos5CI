@@ -151,30 +151,31 @@ class C_User extends CI_Controller {
     }
 
     public function authCandidat() {
-        $email = $this->input->post('emailUser');       //recup de email de user
-        $nom = $this->input->post('nomUser');                       //recup de nom de user
-        $prenom = $this->input->post('prenomUser');                       //recup de prenom de user
-        $logAsValue = $this->input->post('logValue');               //recup de logvalue (10)
-
+        $email = $this->input->post('emailUser');
+        $nom = $this->input->post('nomUser');
+        $prenom = $this->input->post('prenomUser');
+        $logAsValue = $this->input->post('logValue');
+    
         $conditions = [
             'email' => $email,
             'nom' => $nom,
             'prenom' => $prenom
         ];
-
+    
         $userdata = $this->dao->select_where('candidat', $conditions);
-        $user = $userdata[0];
-        
+    
         if (!empty($userdata)) {
-            $user = $userdata[0];
-        
+            $user = $userdata[0];  
+    
             $this->session->set_userdata('connectedUser', $user);
             $this->session->set_userdata('logValue', $logAsValue);  
             redirect('C_Home');
         } else {
-            redirect('userLogin/C_User/authCandidat');
+            // User not found → handle gracefully
+            $this->loginAsCandidat($logAsValue);
         }
     }
+    
 
 /* FONCTION DE DECONNEXION 
         DETRUIT TOUTES LES DONNEES DE LA SESSION EXISTANTE

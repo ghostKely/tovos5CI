@@ -225,3 +225,27 @@ INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
 INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 WHERE bv.statutPostulation = FALSE;
+WHERE bv.checkRH = TRUE;
+
+
+-- View pour QCM 
+CREATE OR REPLACE VIEW v_qcm AS
+SELECT 
+    q.idquestion,
+    q.question,
+    q.datecreation,
+    q.idbesoin,
+    b.nombre_employe,
+    b.description AS besoin_description,
+    b.annee_experience,
+    b.datebesoin,
+    b.idmanager,
+    b.id_diplome,
+    b.idcontrat,
+    b.idposte,
+    r.idreponse,
+    r.reponse,
+    r.vraifaux
+FROM question q
+LEFT JOIN besoin b ON q.idbesoin = b.idbesoin
+LEFT JOIN reponse r ON q.idquestion = r.idquestion;
