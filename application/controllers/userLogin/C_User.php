@@ -170,7 +170,6 @@ class C_User extends CI_Controller {
         
             $this->session->set_userdata('connectedUser', $user);
             $this->session->set_userdata('logValue', $logAsValue);  
-            
             redirect('C_Home');
         } else {
             redirect('userLogin/C_User/authCandidat');
@@ -181,13 +180,13 @@ class C_User extends CI_Controller {
         DETRUIT TOUTES LES DONNEES DE LA SESSION EXISTANTE
 */
     public function disconnect() {
-        $this->session->sess_destroy();
-        $this->session->unset_userdata('');
+        $this->session->unset_userdata('logValue');
         redirect('C_Home');
     }
 
     public function disconnectCandidat() {
-        $this->session->unset_userdata('');
+        $this->session->unset_userdata(['logValue','connectedValue']);
+        $this->session->sess_destroy();
         redirect('C_Home');
     }
 
