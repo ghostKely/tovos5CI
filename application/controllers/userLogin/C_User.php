@@ -185,8 +185,8 @@ class C_User extends CI_Controller {
     }
 
     public function disconnectCandidat() {
-        $this->session->unset_userdata('logValue');
-        $this->session->unset_userdata('connectedUser');
+        $this->session->unset_userdata(['logValue','connectedValue']);
+        $this->session->sess_destroy();
         redirect('C_Home');
     }
 
