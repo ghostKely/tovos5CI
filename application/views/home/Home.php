@@ -7,7 +7,7 @@
         <?php $this->load->view('component/styleLink/CssLink')?>
     </head>
     <?php if (isset($value)) {
-echo $value;
+        echo $value;
     } ?>
     <body> 
         <div class="col-md-12 row">

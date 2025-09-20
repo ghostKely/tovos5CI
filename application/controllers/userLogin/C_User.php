@@ -32,6 +32,59 @@ class C_User extends CI_Controller {
 		$this->load->view('home/Home', $data);                  //page principale où on load les pages
     }
 
+    /* FONCTION POUR S'INSCRIRE EN TANT QUE CANDIDAT
+    ARGUMENTS : 
+        .$logAsValue : determine la table dans laquelle on va verifier email et mdp
+    */
+
+    public function inscriptionAs($logAsValue){
+        $data['pageTitle'] = "Inscription";                       //titre de la page de destination
+        $data['pageToLoad'] = "userLogin/signin";                //path de a page de destination
+        $data['logAsValue'] = $logAsValue;                      //10
+        
+        $data['diplomes'] = $this->dao->select_all('diplome');
+
+		$this->load->view('home/Home', $data);                  //page principale où on load les pages
+    }
+
+    public function signIn(){
+        $config['upload_path'] = './upload/pdfs/';
+        $config['allowed_types'] = 'pdf';
+        $config['max_size'] = 10000;
+
+        $this->load->library('upload', $config);
+
+        if(!$this->upload->do_upload('pdfCandidat')){
+            echo $this->upload->display_errors();
+        }else{
+            $data = $this->upload->data();
+
+            $file_path = 'upload/pdfs/'.$data['file_name'];
+
+            $to_insert=[
+                'email' => $this->input->post('mailCandidat'),
+                'nom' => $this->input->post('nomCandidat'),
+                'prenom' => $this->input->post('prenomCandidat'),
+                'adresse' => $this->input->post('adresseCandidat'),
+                'dtn' => $this->input->post('dtnCandidat'),
+                'id_diplome' => $this->input->post('diplome'),
+                'renseignement' => $this->input->post('rsgnCandidat'),
+                'totalanne_experience' => $this->input->post('expCandidat'),
+                'file_path' => $file_path
+            ];
+
+            $inserted = $this->dao->insert_into('candidat', $to_insert);
+
+            if ($inserted !== false) {                                    //si la valeur de $inserted n'est pas null alors insertion réussi
+                redirect('C_Home');
+            } else {                                                    //si la valeur de $inserted est pas null alors insertion raté                
+                $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion raté
+                    'message' => "Votre inscription a échoué"                 //message de validation pour page Validation.php
+                ]);
+            }
+        }
+    }
+
 /* FONCTION POUR VERIFIER SI USER A REMPLI TOUS LES CHAMPS
         SI 1 SEUL VIDE ALORS REDIRECTION
 */

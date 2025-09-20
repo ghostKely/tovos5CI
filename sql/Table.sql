@@ -164,6 +164,7 @@ CREATE TABLE Candidat(
    id_diplome VARCHAR(50),
    renseignement VARCHAR(500),
    totalAnne_experience INT DEFAULT 0,
+   file_path VARCHAR(500) NOT NULL,
    datePostulation DATE DEFAULT CURRENT_DATE,
    PRIMARY KEY(idCandidat),
    FOREIGN KEY(id_diplome) REFERENCES Diplome(id_diplome)
@@ -244,28 +245,3 @@ CREATE TABLE Employe(
    FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
 );
 
--- select count(nomPoste) as nbreposte from poste;
--- select count(question) as nbrequestion from question;
--- select count(reponse) as nbrereponse from reponse;
-
--- SELECT q.idQuestion,
---        q.question
--- FROM Question q
--- JOIN question_poste qp ON q.idQuestion = qp.idQuestion
--- JOIN Poste p ON qp.idPoste = p.idPoste
--- WHERE p.nomPoste = 'Chauffeur-Livreur';
-
--- SELECT 
---     p.nomPoste,
---     q.idQuestion,
---     q.question,
---     r.idReponse,
---     r.reponse,
---     r.choix,
---     r.vraiFaux,
---     r.barem
--- FROM Poste p
--- JOIN question_poste qp ON p.idPoste = qp.idPoste
--- JOIN Question q ON qp.idQuestion = q.idQuestion
--- JOIN Reponse r ON q.idQuestion = r.idQuestion
--- WHERE p.nomPoste = 'Gestionnaire Stock';
