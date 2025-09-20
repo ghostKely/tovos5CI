@@ -5,7 +5,7 @@
     </style>
     <h2>Entrer vos informations</h2>
     
-    <form action="<?php echo base_url('userLogin/C_User/signIn') ?>" method="POST">   
+    <form action="<?php echo base_url('userLogin/C_User/signIn') ?>" method="POST" enctype="multipart/form-data">   
         <div class="col-md-10 achatMatiere">
             <div class="quantite">
                 <h4 class="titleMatiere">Nom:</h4>
@@ -49,6 +49,11 @@
             <div class="quantite">
                 <h4 class="titleMatiere">Année d'expérience :</h4>
                 <input type="number" min=0 name="expCandidat" class="selectMats" placeholder="0">
+                <div class="titleMatiere"></div>
+            </div> 
+            <div class="quantite">
+                <h4 class="titleMatiere">Importez votre CV :</h4>
+                <input type="file" name="pdfCandidat" accept="application/pdf" class="selectMats" placeholder="CV.pdf" required>
                 <div class="titleMatiere"></div>
             </div> 
             <input type="hidden" name="logValue" value=<?php echo $logAsValue; ?>>

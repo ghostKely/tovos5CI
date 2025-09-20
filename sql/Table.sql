@@ -162,6 +162,7 @@ CREATE TABLE Candidat(
    id_diplome VARCHAR(50),
    renseignement VARCHAR(500),
    totalAnne_experience INT DEFAULT 0,
+   file_path VARCHAR(500) NOT NULL,
    datePostulation DATE DEFAULT CURRENT_DATE,
    PRIMARY KEY(idCandidat),
    FOREIGN KEY(id_diplome) REFERENCES Diplome(id_diplome)

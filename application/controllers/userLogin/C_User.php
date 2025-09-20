@@ -48,25 +48,40 @@ class C_User extends CI_Controller {
     }
 
     public function signIn(){
-        $to_insert=[
-            'email' => $this->input->post('mailCandidat'),
-            'nom' => $this->input->post('nomCandidat'),
-            'prenom' => $this->input->post('prenomCandidat'),
-            'adresse' => $this->input->post('adresseCandidat'),
-            'dtn' => $this->input->post('dtnCandidat'),
-            'id_diplome' => $this->input->post('diplome'),
-            'renseignement' => $this->input->post('rsgnCandidat'),
-            'totalanne_experience' => $this->input->post('expCandidat')
-        ];
+        $config['upload_path'] = './upload/pdfs/';
+        $config['allowed_types'] = 'pdf';
+        $config['max_size'] = 10000;
 
-        $inserted = $this->dao->insert_into('candidat', $to_insert);
+        $this->load->library('upload', $config);
 
-        if ($inserted !== false) {                                    //si la valeur de $inserted n'est pas null alors insertion réussi
-            redirect('C_Home');
-        } else {                                                    //si la valeur de $inserted est pas null alors insertion raté                
-            $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion raté
-                'message' => "Votre inscription a échoué"                 //message de validation pour page Validation.php
-            ]);
+        if(!$this->upload->do_upload('pdfCandidat')){
+            echo $this->upload->display_errors();
+        }else{
+            $data = $this->upload->data();
+
+            $file_path = 'upload/pdfs/'.$data['file_name'];
+
+            $to_insert=[
+                'email' => $this->input->post('mailCandidat'),
+                'nom' => $this->input->post('nomCandidat'),
+                'prenom' => $this->input->post('prenomCandidat'),
+                'adresse' => $this->input->post('adresseCandidat'),
+                'dtn' => $this->input->post('dtnCandidat'),
+                'id_diplome' => $this->input->post('diplome'),
+                'renseignement' => $this->input->post('rsgnCandidat'),
+                'totalanne_experience' => $this->input->post('expCandidat'),
+                'file_path' => $file_path
+            ];
+
+            $inserted = $this->dao->insert_into('candidat', $to_insert);
+
+            if ($inserted !== false) {                                    //si la valeur de $inserted n'est pas null alors insertion réussi
+                redirect('C_Home');
+            } else {                                                    //si la valeur de $inserted est pas null alors insertion raté                
+                $this->session->set_flashdata('checkValidation', [          //redirect vers page d'insertion + popup de validation de insertion raté
+                    'message' => "Votre inscription a échoué"                 //message de validation pour page Validation.php
+                ]);
+            }
         }
     }
 
