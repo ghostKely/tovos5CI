@@ -2,18 +2,6 @@ drop database tovos5;
 CREATE DATABASE tovos5;
 \c tovos5;
 
-
-CREATE SEQUENCE seq_diplome START WITH 1 INCREMENT BY 1;
-
--- Table Diplome
-CREATE TABLE Diplome(
-   id_diplome VARCHAR(50) DEFAULT 'DPLM' || LPAD(NEXTVAL('seq_diplome')::text, 6, '0'),
-   nomDiplome VARCHAR(50) NOT NULL UNIQUE,
-   ranking INT,
-   PRIMARY KEY(id_diplome)
-);
-
-
 -- =====================
 -- Côté manager
 -- =====================
@@ -55,6 +43,15 @@ CREATE SEQUENCE seq_besoin START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_question START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_reponse START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_annonce START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_diplome START WITH 1 INCREMENT BY 1;
+
+-- Table Diplome
+CREATE TABLE Diplome(
+   id_diplome VARCHAR(50) DEFAULT 'DPLM' || LPAD(NEXTVAL('seq_diplome')::text, 6, '0'),
+   nomDiplome VARCHAR(50) NOT NULL UNIQUE,
+   ranking INT,
+   PRIMARY KEY(id_diplome)
+);
 
 -- Table Departement
 CREATE TABLE Departement(
@@ -103,6 +100,7 @@ CREATE TABLE BesoinValide(
    idBesoinValide VARCHAR(50) DEFAULT 'BSNVLD' || LPAD(NEXTVAL('seq_besoin')::text, 6, '0'),
    dateValidationRH DATE,
    checkRH BOOLEAN DEFAULT FALSE,
+   averageNoteQcm INT,
    dateValidationDG DATE,
    checkDG BOOLEAN DEFAULT FALSE,
    statutPostulation BOOLEAN DEFAULT FALSE,
@@ -115,6 +113,7 @@ CREATE TABLE BesoinValide(
 CREATE TABLE Question(
    idQuestion VARCHAR(50) DEFAULT 'QSTN' || LPAD(NEXTVAL('seq_question')::text, 6, '0'),
    question TEXT NOT NULL UNIQUE,
+   dateCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    idBesoin VARCHAR(50) NOT NULL,
    PRIMARY KEY(idQuestion),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)
@@ -124,9 +123,7 @@ CREATE TABLE Question(
 CREATE TABLE Reponse(
    idReponse VARCHAR(50) DEFAULT 'RPNS' || LPAD(NEXTVAL('seq_reponse')::text, 6, '0'),
    reponse VARCHAR(500),
-   choix VARCHAR(50),
    vraiFaux BOOLEAN,
-   barem INT,
    idQuestion VARCHAR(50),
    PRIMARY KEY(idReponse),
    FOREIGN KEY(idQuestion) REFERENCES Question(idQuestion)

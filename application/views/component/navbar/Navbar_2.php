@@ -20,7 +20,7 @@
                 <span class="glyphicon glyphicon-menu-down down" aria-hidden="true"></span>
             </div>
                 <div id="dropdownMenubesoin" class="dropdown-content">
-                    <a href="<?php echo base_url('besoin/C_Besoin/getListeBesoinNonValide')?>">
+                    <a href="<?php echo base_url('besoin/C_Besoin/getListeBesoin')?>">
                         <div class="boutonnavbar">
                             <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
                             <span class="link-text">Liste</span>
