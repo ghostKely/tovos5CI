@@ -40,6 +40,7 @@ CREATE SEQUENCE seq_departement START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_poste START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_contrat START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_besoin START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_besoinvalide START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_question START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_reponse START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_annonce START WITH 1 INCREMENT BY 1;
@@ -97,14 +98,14 @@ CREATE TABLE Besoin(
 
 -- Table Besoin Valide
 CREATE TABLE BesoinValide(
-   idBesoinValide VARCHAR(50) DEFAULT 'BSNVLD' || LPAD(NEXTVAL('seq_besoin')::text, 6, '0'),
+   idBesoinValide VARCHAR(50) DEFAULT 'BSNVLD' || LPAD(NEXTVAL('seq_besoinvalide')::text, 6, '0'),
    dateValidationRH DATE,
    checkRH BOOLEAN DEFAULT FALSE,
    averageNoteQcm INT,
    dateValidationDG DATE,
    checkDG BOOLEAN DEFAULT FALSE,
    statutPostulation BOOLEAN DEFAULT FALSE,
-   idBesoin VARCHAR(50) UNIQUE NOT NULL,
+   idBesoin VARCHAR(50) NOT NULL,
    PRIMARY KEY(idBesoinValide),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)
 );
@@ -133,7 +134,7 @@ CREATE TABLE Reponse(
 CREATE TABLE Annonce(
    idAnnonce VARCHAR(50) DEFAULT 'ANNC' || LPAD(NEXTVAL('seq_annonce')::text, 6, '0'),
    titre VARCHAR(50),
-   datePublicatoin DATE,
+   datePublication DATE,
    idBesoin VARCHAR(50) NOT NULL UNIQUE,
    PRIMARY KEY(idAnnonce),
    FOREIGN KEY(idBesoin) REFERENCES Besoin(idBesoin)

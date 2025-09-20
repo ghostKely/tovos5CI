@@ -180,7 +180,8 @@ class C_User extends CI_Controller {
         DETRUIT TOUTES LES DONNEES DE LA SESSION EXISTANTE
 */
     public function disconnect() {
-        $this->session->unset_userdata('logValue');
+        $this->session->unset_userdata('');
+        $this->session->sess_destroy();
         redirect('C_Home');
     }
 
