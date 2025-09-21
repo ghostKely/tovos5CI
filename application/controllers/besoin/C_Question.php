@@ -58,6 +58,31 @@ class C_Question extends CI_Controller {
         return $questionList;                                   //toutes les colonnes concernant les questions
     }
 
+/* FOCNTION POUR CHECK SI LA REPONSE EXISTE */
+    public function checkIfReponseExist($reponses, $vrais, $idBesoin) {
+        $tableau = array();                                         
+        for ($j=0; $j<sizeof($reponses); $j++) {
+            $reponse = $reponses[$j];                       //la liste de reponses a une question
+            $tableau[$j] = false;                           //on suppose que la reponse n'existe pas de base
+            for ($i=0; $i<sizeof($reponse); $i++) {
+                if ($i == $vrais[$j]-1) {                   //si la valeur de vrai(reponse vrai) - 1 & indice de la reponse sont egaux => reponse vrai
+                    $tableau[$j] = true;                    //si la reponse existe
+                } 
+            }
+        }
+
+        foreach ($tableau as $existOrNot) {
+            if ($existOrNot === false) {
+                $this->session->set_flashdata('checkValidation', [                                      //redirect vers page d'insertion + popup de validation de insertion ts nety
+                    'message' => "Questionnaire non créé, Réponse inexistante pour une question !"      //message de validation pour page Validation.php
+                    ]);
+                redirect('besoin/C_Question/pageAddQuestionBesoin/'.$idBesoin); 
+            }
+        }
+
+        return true;
+    }
+
 /* FONCTION POUR INSERER LES REPONSES CORRESPONDANT AUX QUESTIONS */
     public function insertReponse($questionList, $reponses, $vrais) {
         for ($j=0; $j<sizeof($reponses); $j++) {
@@ -91,9 +116,10 @@ class C_Question extends CI_Controller {
         $vrais = $this->input->post('vrai');                                //récupération de la liste de bonne reponse
         $idBesoin = $this->input->post('idBesoin');                         //récupération de id besoin pour qcm
 
-        $CheckInsertQueston = $this->insertQuestion($questions, $idBesoin);             //insertion des question pour QCM     
-        $questionList = $this->getLastQuestion($questions, $idBesoin);                  //liste des questions inserées pour ID
-        $checkInsertReponse = $this->insertReponse($questionList, $reponses, $vrais);   //insertion des reponses aux questions
+        $checkIfReponseExist = $this->checkIfReponseExist($reponses, $vrais, $idBesoin);    //checking si la bonne reponse existe vraiment
+        $CheckInsertQueston = $this->insertQuestion($questions, $idBesoin);                 //insertion des question pour QCM     
+        $questionList = $this->getLastQuestion($questions, $idBesoin);                      //liste des questions inserées pour ID
+        $checkInsertReponse = $this->insertReponse($questionList, $reponses, $vrais);       //insertion des reponses aux questions
         $checkInsertReponse = true;
             if ($checkInsertReponse === true) {                         //si la valeur de $inserted n'est pas null alors insertion réussi
                 $this->session->set_flashdata('checkValidation', [      //redirect vers page d'insertion + popup de validation de insertion réussi

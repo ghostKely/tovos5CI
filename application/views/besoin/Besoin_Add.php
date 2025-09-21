@@ -39,15 +39,6 @@
                 <input type="text" name="experience" class="selectMats">
                 <div class="titleMatiere"></div>
             </div>  
-            <div class="quantite"> 
-                <div class="titleMatiere"><h4>Contrat : </h4></div>
-                <select class="selectMats" name="contrat">
-                    <?php foreach($contrats as $contrat) { ?>
-                        <option value="<?php echo $contrat['idcontrat'] ?>"><?php echo $contrat['typecontrat'] ?></option>
-                    <?php } ?>
-                </select>
-                <div class="titleMatiere"></div>
-            </div>
             <div class="quantite">
                 <h4 class="titleMatiere">Date de demande :</h4> 
                 <input type="date" name="datedemande" class="selectMats" value="<?php echo date('Y-m-d'); ?>">
@@ -94,15 +85,6 @@
                 <input type="text" name="experience[]" class="selectMats">
                 <div class="titleMatiere"></div>
             </div>  
-            <div class="quantite"> 
-                <div class="titleMatiere"><h4>Contrat : </h4></div>
-                <select class="selectMats" name="contrat[]">
-                    <?php foreach($contrats as $contrat) { ?>
-                        <option value="<?php echo $contrat['idcontrat'] ?>"><?php echo $contrat['typecontrat'] ?></option>
-                    <?php } ?>
-                </select>
-                <div class="titleMatiere"></div>
-            </div>
             <button class="delete">SUPPRIMER</button>
         </div>      
 <script>

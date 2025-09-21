@@ -20,7 +20,7 @@
             <?php 
             if (!empty($listeBesoin)) {
                 foreach ($listeBesoin as $besoin) { ?>
-                    <tr class="ligne" data-href="<?php echo base_url('besoin/C_Besoin/getDetailBesoin/'.$besoin['idbesoin']); ?>">
+                    <tr class="ligne" data-href="<?php echo base_url('besoin/C_Besoin/getDetailAllBesoin/'.$besoin['idbesoin']); ?>">
                         <td><?php echo $besoin['datebesoin']; ?></td>
                         <td><?php echo $besoin['nomdepartement']; ?></td>
                         <td><?php echo $besoin['nomposte']; ?></td>

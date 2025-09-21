@@ -19,11 +19,6 @@ SELECT
     d.nomDiplome,
     d.ranking as niveau_diplome,
     
-    -- Informations du Contrat
-    b.idContrat,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
-    
     -- Informations du Poste
     b.idPoste,
     p.nomPoste,
@@ -37,7 +32,6 @@ LEFT JOIN BesoinValide bv ON b.idBesoin = bv.idBesoin
 -- Jointures avec toutes les tables de référence
 INNER JOIN Manager m ON b.idManager = m.idManager
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement;
 
@@ -60,11 +54,6 @@ SELECT
     d.nomDiplome,
     d.ranking as niveau_diplome,
     
-    -- Informations du Contrat
-    b.idContrat,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
-    
     -- Informations du Poste
     b.idPoste,
     p.nomPoste,
@@ -82,12 +71,36 @@ LEFT JOIN Question q ON b.idBesoin = q.idBesoin
 -- Jointures INNER avec les autres tables
 INNER JOIN Manager m ON b.idManager = m.idManager
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 -- Filtrer seulement les besoins SANS question
 WHERE q.idBesoin IS NULL
 ORDER BY b.dateBesoin DESC;
+
+-- VIEW POUR AVOIR LE QCM D'UNE DEMANDE DE BESOIN
+CREATE OR REPLACE VIEW v_besoinqcm AS
+SELECT 
+    b.idBesoin,
+    b.description AS besoin_description,
+    b.nombre_employe,
+    b.annee_experience,
+    b.dateBesoin,
+    q.idQuestion,
+    q.question,
+    q.dateCreation AS question_date_creation,
+    JSON_AGG(
+        JSON_BUILD_OBJECT(
+            'idReponse', r.idReponse,
+            'reponse', r.reponse,
+            'vraiFaux', r.vraiFaux
+        ) 
+        ORDER BY r.idReponse
+    ) AS reponses
+FROM Besoin b
+INNER JOIN Question q ON b.idBesoin = q.idBesoin
+LEFT JOIN Reponse r ON q.idQuestion = r.idQuestion
+GROUP BY b.idBesoin, b.description, b.nombre_employe, b.annee_experience, b.dateBesoin, q.idQuestion, q.question, q.dateCreation
+ORDER BY b.idBesoin, q.idQuestion;
 
 -- ================================================================================================= VIEW RH
 -- VIEW POUR AVOIR LA LISTE DES BESOINS ENCORE NON VALIDE PAR RH
