@@ -235,7 +235,6 @@ INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 WHERE bv.statutPostulation = FALSE;
-WHERE bv.checkRH = TRUE;
 
 
 -- View pour QCM 
@@ -251,7 +250,6 @@ SELECT
     b.datebesoin,
     b.idmanager,
     b.id_diplome,
-    b.idcontrat,
     b.idposte,
     r.idreponse,
     r.reponse,
@@ -259,3 +257,34 @@ SELECT
 FROM question q
 LEFT JOIN besoin b ON q.idbesoin = b.idbesoin
 LEFT JOIN reponse r ON q.idquestion = r.idquestion;
+
+CREATE OR REPLACE VIEW v_detailqcm
+AS
+SELECT 
+    nq.idNoteQcm,
+    nq.note,
+    nq.dateQcm,
+    c.idCandidat,
+    c.nom AS candidat_nom,
+    c.prenom AS candidat_prenom,
+    c.email AS candidat_email,
+    c.adresse AS candidat_adresse,
+    c.dtn AS candidat_naissance,
+    c.totalAnne_experience AS candidat_experience,
+    c.file_path AS candidat_cv,
+    c.datePostulation,
+    d.nomDiplome AS candidat_diplome,
+    d.ranking AS diplome_ranking,
+    a.idAnnonce,
+    a.titre AS annonce_titre,
+    a.datePublication AS annonce_date_pub,
+    b.idBesoin,
+    b.nombre_employe,
+    b.description AS besoin_description,
+    b.annee_experience AS besoin_experience,
+    b.dateBesoin
+FROM NoteQcm nq
+JOIN Candidat c ON nq.idCandidat = c.idCandidat
+LEFT JOIN Diplome d ON c.id_diplome = d.id_diplome
+JOIN Annonce a ON nq.idAnnonce = a.idAnnonce
+JOIN Besoin b ON a.idBesoin = b.idBesoin;

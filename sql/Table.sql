@@ -181,9 +181,10 @@ CREATE SEQUENCE seq_entretien START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_essai START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_renouvellement START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_employe START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_invoice_cli START WITH 1 INCREMENT BY 1;
 
 -- Table NoteQcm
-CREATE TABLE NoteQcm(
+CREATE TABLE NoteQcm (
    idNoteQcm VARCHAR(50) DEFAULT 'NTQCM' || LPAD(NEXTVAL('seq_noteqcm')::text, 6, '0'),
    note DECIMAL(15,2),
    dateQcm DATE,
@@ -191,18 +192,20 @@ CREATE TABLE NoteQcm(
    idCandidat VARCHAR(50) NOT NULL,
    PRIMARY KEY(idNoteQcm),
    FOREIGN KEY(idAnnonce) REFERENCES Annonce(idAnnonce),
-   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
+   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat),
+   UNIQUE (idAnnonce, idCandidat) 
 );
 
 -- Table Entretien
 CREATE TABLE Entretien(
    idEntretien VARCHAR(50) DEFAULT 'ETRT' || LPAD(NEXTVAL('seq_entretien')::text, 6, '0'),
    date_entretien DATE,
-   statut BOOLEAN,
-   pretention DECIMAL(15,2),
    idCandidat VARCHAR(50) UNIQUE NOT NULL,
+   idAnnonce VARCHAR(50) UNIQUE NOT NULL,
    PRIMARY KEY(idEntretien),
-   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
+   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat),
+   FOREIGN KEY(idAnnonce) REFERENCES Annonce(idAnnonce),
+   UNIQUE (idCandidat, idAnnonce)
 );
 
 -- Table Essai
@@ -238,6 +241,16 @@ CREATE TABLE Employe(
    idCandidat VARCHAR(50) UNIQUE NOT NULL,
    PRIMARY KEY(idEmploye),
    FOREIGN KEY(idPoste) REFERENCES Poste(idPoste),
+   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
+);
+
+CREATE TABLE invoice_client(
+   idInvoiceClient VARCHAR(50) DEFAULT 'INVCLI' || LPAD(NEXTVAL('seq_invoice_cli')::text, 6, '0'),
+   date_reception DATE DEFAULT CURRENT_DATE,
+   type_invoice TEXT NOT NULL, --entretien/contrat  --pourquoi pas de table type? entretien n'est pas un contrat
+   description_invoice TEXT NOT NULL,
+   idCandidat VARCHAR(50) UNIQUE NOT NULL,
+   PRIMARY KEY(idInvoiceClient),
    FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
 );
 

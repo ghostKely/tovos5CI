@@ -158,7 +158,6 @@ class C_Question extends CI_Controller {
                     'datebesoin' => $row['datebesoin'],
                     'idmanager' => $row['idmanager'],
                     'id_diplome' => $row['id_diplome'],
-                    'idcontrat' => $row['idcontrat'],
                     'idposte' => $row['idposte'],
                     'answers' => []  // initialize empty array for answers
                 ];

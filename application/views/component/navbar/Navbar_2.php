@@ -13,6 +13,13 @@
                     <span class="link-text">Home</span>
                 </div>
             </a>
+
+            <a href="<?php echo base_url('annonce/C_Entretien/getListeEntretien')?>">
+                <div class="boutonnavbar">
+                    <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                    <span class="link-text">Résultats QCM</span>
+                </div>
+            </a>
             
             <div class="boutonnavbar" id="besoin" data-dropdown="dropdownMenubesoin">
                 <span class="glyphicon glyphicon-shopping-cart icon" aria-hidden="true"></span>
@@ -27,8 +34,9 @@
                         </div>
                     </a>
                 </div>
+            </div>
             
-        </div>
+        
     </div>
     
 <script>

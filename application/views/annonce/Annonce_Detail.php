@@ -45,6 +45,23 @@
             color: rgb(47 202 38);
             border: 1px solid rgb(47 202 38);
         }
+
+        .qcm-note {
+            display: inline-block;       
+            padding: 8px 12px;           
+            background-color: #007BFF;  
+            color: white;               
+            font-weight: bold;         
+            border-radius: 6px;          
+            font-size: 1.2em;          
+            text-align: center;
+            transition: background-color 0.3s ease; 
+            min-width: 40px;             
+        }
+
+        .qcm-note:hover {
+            background-color: #0056b3;   
+        }
     </style>
     
     <div class="col-md-9">
@@ -84,25 +101,24 @@
                     <div class="point">................................................</div>
                     <div class="data"><?php echo $detailAnnonce[0]['annee_experience'] ?></div>
                 </div>
-                <div class="info">
-                    <div class="data">Type de contrat  </div>
-                    <div class="point">................................................</div>
-                    <div class="data"><?php echo $detailAnnonce[0]['typecontrat'] ?> (<?php echo $detailAnnonce[0]['abreviation'] ?>)</div>
-                </div>
                 <div class="descri">
                     <div class="data">Description du poste :  </div>
                     <div class="textDescri"><?php echo $detailAnnonce[0]['description'] ?></div>
                 </div>
                 <div class="validation">
-                    <?php if($this->session->has_userdata('connectedUser')): ?>
-                        <a href="<?php echo base_url('besoin/C_Question/showQuestionForAnnounce/'.$detailAnnonce[0]['idbesoin']) ?>">
-                            <button class="modifier">POSTULER</button>
-                        </a>
-                    <?php else: ?>
-                        <a href="<?php echo base_url('userLogin/C_User/loginAsCandidat/10') ?>">
-                            <button class="modifier">SIGN IN</button>
-                        </a>
-                    <?php endif; ?>
+                    <?php if($qcm != null){ ?>
+                        <div class="qcm-note">Votre note: <?php echo $qcm[0]['note'] ?></div>
+                    <?php }else{ ?>
+                        <?php if($this->session->has_userdata('connectedUser')){ ?>
+                            <a href="<?php echo base_url('besoin/C_Question/showQuestionForAnnounce/'.$detailAnnonce[0]['idbesoin']) ?>">
+                                <button class="modifier">POSTULER</button>
+                            </a>
+                        <?php }else{ ?>
+                            <a href="<?php echo base_url('userLogin/C_User/loginAsCandidat/10') ?>">
+                                <button class="modifier">SIGN IN</button>
+                            </a>
+                        <?php } ?>
+                    <?php } ?>
                 </div>
         </div>
     </div>

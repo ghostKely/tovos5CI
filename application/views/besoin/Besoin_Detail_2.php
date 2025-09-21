@@ -84,9 +84,10 @@
                         <div class="point">................................................</div>
                         <div class="data"><?php echo $detailBesoin[0]['nomdiplome'] ?></div>
                     </div>
-                    <div class="descri">
+                    <div class="info">
                         <div class="data">Description du poste :  </div>
-                        <div class="textDescri"><?php echo $detailBesoin[0]['description'] ?></div>
+                        <div class="point">................................................</div>
+                        <div class="data"><?php echo $detailBesoin[0]['description'] ?></div>
                     </div>
                     <div class="info">
                         <div class="data">Nombre de question au QCM :  </div>
