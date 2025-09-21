@@ -83,10 +83,25 @@
                     <div class="data">Description du poste :  </div>
                     <div class="textDescri"><?php echo $detailBesoin[0]['description'] ?></div>
                 </div>
+
+            
+            <h2>QCM</h2>
+                <?php foreach ($qcm as $question) { ?>
+                    <div class="descri">
+                        <div class="data"><?php echo $question['question'] ?></div>
+                        <?php 
+                            $reponses = json_decode($question['reponses'], true);
+                            foreach ($reponses as $reponse) { ?>
+                                <div class="textDescri"><?php echo $reponse['reponse'] ?></div>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+                
                 <div class="validation">
                     <a href="<?php echo base_url('besoin/C_Question/pageAddQuestionBesoin/'.$detailBesoin[0]['idbesoin']) ?>">
-                        <button class="modifier">CREER UN QUESTIONNAIRE</button>
+                        <button class="modifier">AJOUTER UNE QUESTION</button>
                     </a>
                 </div>
+
         </div>
     </div>

@@ -29,7 +29,13 @@
                     <a href="<?php echo base_url('besoin/C_Besoin/getListeBesoin')?>">
                         <div class="boutonnavbar">
                             <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
-                            <span class="link-text">Liste</span>
+                            <span class="link-text">Besoins Sans Question</span>
+                        </div>
+                    </a>
+                    <a href="<?php echo base_url('besoin/C_Besoin/getListeAllBesoin')?>">
+                        <div class="boutonnavbar">
+                            <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                            <span class="link-text">Liste Besoins</span>
                         </div>
                     </a>
                 </div>

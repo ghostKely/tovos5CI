@@ -87,12 +87,10 @@ CREATE TABLE Besoin(
    dateBesoin DATE,
    idManager VARCHAR(50) NOT NULL,
    id_diplome VARCHAR(50) NOT NULL,
-   idContrat VARCHAR(50) NOT NULL,
    idPoste VARCHAR(50) NOT NULL,
    PRIMARY KEY(idBesoin),
    FOREIGN KEY(idManager) REFERENCES Manager(idManager),
    FOREIGN KEY(id_diplome) REFERENCES Diplome(id_diplome),
-   FOREIGN KEY(idContrat) REFERENCES Contrat(idContrat),
    FOREIGN KEY(idPoste) REFERENCES Poste(idPoste)
 );
 

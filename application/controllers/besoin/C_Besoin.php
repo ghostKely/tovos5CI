@@ -40,14 +40,13 @@ class C_Besoin extends CI_Controller {
     public function saveBesoin() {
         $idPoste = $this->input->post('poste');                             //récupération de id de poste pour besoin
         $id_diplome = $this->input->post('diplome');                        //récupération de id de diplome minimum 
-        $idContrat = $this->input->post('contrat');                         //récupération de id de contrat
         $nbrePeronnel = $this->input->post('nbrepersonnel');                //récupération de la nombre de personnel a engager
         $experience = $this->input->post('experience');                     //récupération de année d'experience recquis pour poste
         $description = $this->input->post('description');                   //récupération de description du travail pour poste
         $datedemande = $this->input->post('datedemande');                   //récupération de date quand on a fait la demande de besoin
         $id = $this->session->userdata('id');                               //récupération de id de la personne log
 
-        $valeurPost = array($idPoste, $id_diplome, $idContrat, $nbrePeronnel, $experience, $description, $datedemande);
+        $valeurPost = array($idPoste, $id_diplome, $nbrePeronnel, $experience, $description, $datedemande);
         $this->checkChampsVide($valeurPost, "besoin/C_Besoin/page_AjoutBesoin");        //checking si un champ est vide
 
         //creation du tableau pour la requete
@@ -58,7 +57,6 @@ class C_Besoin extends CI_Controller {
                 'datebesoin' => $datedemande,
                 'idmanager' => $id,
                 'id_diplome' => $id_diplome,
-                'idcontrat' => $idContrat,        
                 'idposte' => $idPoste
             ];
             $checkInsert = $this->dao->insert_into('besoin', $to_insert);   //retour de id de insertion si insertion réussi ($inserted != null)
@@ -87,6 +85,30 @@ class C_Besoin extends CI_Controller {
         $data['titreListe'] = $detailPage['precisionListBesoin'];            //titre de la liste des demande de besoins
         
 		$this->load->view('home/Home', $data);                                      //page principale où on load les pages
+    }
+
+/* FONCTION POUR AVOIR LA LISTE DES BESOINS POUR MANAGER/RH/DG */
+    public function getListeAllBesoin(){
+        $data['pageTitle'] = "Liste Besoins";                       //titre de la page de destination
+        $data['pageToLoad'] = "besoin/Besoin_ListAll";                 //path de a page de destination
+        $data['listeBesoin'] = $this->dao->select_all('v_besoin');  //liste des besoins non valide
+        $data['titreListe'] = "";                                   //titre de la liste des demande de besoins
+        
+		$this->load->view('home/Home', $data);                                      //page principale où on load les pages
+    }
+
+/* FONCTION POUR AVOIR LES DETAILS D'UNE DEMANDE DE BESOIN POUR UN POSTE */
+    public function getDetailAllBesoin($idBesoin) {
+        $data['pageTitle'] = "Détails Besoins";                          //titre de la page de destination
+        $data['pageToLoad'] = "besoin/Besoin_DetailQuestion";         //path de a page de destination
+        $detailPage = $this->getDetailUser($idBesoin);                            //pour avoir la view et la page à load pour le user
+
+        $condition = ['idbesoin' => $idBesoin];                                         //condition pour avoir le detail d'un besoin
+        $data['detailBesoin'] = $this->dao->select_where('v_besoin', $condition);       //liste des besoins non valide
+        $data['qcm'] = $this->dao->select_where('v_besoinqcm', $condition);             //liste des besoins non valide
+    
+        $data['detailUser'] = $detailPage;                                      //contient info perso de user
+		$this->load->view('home/Home', $data);                                  //page principale où on load les pages
     }
 
 /* ========================================================================================================================== A PROPOS DE VALIDATION DE BESOINS PAR RH */
@@ -124,6 +146,8 @@ class C_Besoin extends CI_Controller {
         $data['detailUser'] = $detailPage;                                      //contient info perso de user
 		$this->load->view('home/Home', $data);                                  //page principale où on load les pages
     }    
+
+
 
 /* FONCTION POUR FAIRE LA VALIDATION DE BESOIN DU RH */
     public function saveValidationRH() {
