@@ -85,11 +85,6 @@
                         <div class="data"><?php echo $detailBesoin[0]['nomdiplome'] ?></div>
                     </div>
                     <div class="info">
-                        <div class="data">Type de contrat  </div>
-                        <div class="point">................................................</div>
-                        <div class="data"><?php echo $detailBesoin[0]['typecontrat'] ?> (<?php echo $detailBesoin[0]['type_contrat_abrev'] ?>)</div>
-                    </div>
-                    <div class="info">
                         <div class="data">Moyenne reponse au QCM :  </div>
                         <div class="point">................................................</div>
                         <div class="data"><?php echo $detailBesoin[0]['averagenoteqcm']; ?></div>

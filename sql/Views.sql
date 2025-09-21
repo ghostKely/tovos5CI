@@ -122,11 +122,6 @@ SELECT
     d.nomDiplome,
     d.ranking as niveau_diplome,
     
-    -- Informations du Contrat
-    b.idContrat,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
-    
     -- Informations du Poste
     b.idPoste,
     p.nomPoste,
@@ -139,17 +134,23 @@ SELECT
     bv.idBesoinValide,
     bv.dateValidationrh,
     bv.checkrh
+    
 FROM Besoin b
 -- Jointure pour vérifier la validation
 LEFT JOIN BesoinValide bv ON b.idBesoin = bv.idBesoin
 -- Jointures avec toutes les tables de référence
 INNER JOIN Manager m ON b.idManager = m.idManager
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
--- Filtre pour les besoins non validés
-WHERE bv.idBesoin IS NULL;
+-- Filtre pour les besoins non validés ET avec au moins une question
+WHERE bv.idBesoin IS NULL
+AND EXISTS (
+    SELECT 1 
+    FROM Question q 
+    WHERE q.idBesoin = b.idBesoin
+)
+ORDER BY b.dateBesoin DESC;
 
 -- ================================================================================================= VIEW DG
 -- VIEW QUI DONNE LA LISTE DES BESOINS VALIDES PAR RH
@@ -163,8 +164,6 @@ SELECT
     b.nombre_employe,
     b.annee_experience, 
     di.nomDiplome,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
     bv.dateValidationRH,
     bv.checkrh,
     bv.checkdg,
@@ -174,7 +173,6 @@ INNER JOIN Besoin b ON bv.idBesoin = b.idBesoin
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement d ON p.id_departement = d.id_departement
 INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 WHERE bv.checkRH = TRUE AND bv.checkDG = FALSE;
 
 --  VIEW POUR AVOIR LA DERNIERE VALIDATION POUR UN BESOIN
@@ -188,21 +186,21 @@ SELECT
     b.nombre_employe,
     b.annee_experience, 
     di.nomDiplome,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
     bv.dateValidationRH,
     bv.checkrh,
     bv.checkdg,
-    bv.averagenoteqcm
+    bv.averagenoteqcm,
+    bv.idBesoinValide,
+    bv.dateValidationDG
 FROM Besoin b
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement d ON p.id_departement = d.id_departement
 INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN (
+    -- Sous-requête pour obtenir la dernière validation de chaque besoin
     SELECT DISTINCT ON (idBesoin) *
     FROM BesoinValide
-    ORDER BY idBesoin, idBesoinValide DESC
+    ORDER BY idBesoin, dateValidationRH DESC, idBesoinValide DESC
 ) bv ON b.idBesoin = bv.idBesoin
 WHERE bv.checkRH = TRUE 
 AND bv.checkDG = FALSE;
@@ -213,13 +211,13 @@ SELECT
     a.idAnnonce,
     a.titre,
     a.datePublication,
+    p.idposte,
     p.nomPoste,
+    d.id_diplome,
     d.nomDiplome,
     b.description,
     b.nombre_employe,
     b.annee_experience,
-    c.typeContrat,
-    c.abreviation,
     bv.statutPostulation,
     dep.nomDepartement,
     bv.dateValidationRH,
@@ -235,7 +233,6 @@ INNER JOIN (
 ) bv ON b.idBesoin = bv.idBesoin
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 WHERE bv.statutPostulation = FALSE;
 WHERE bv.checkRH = TRUE;
