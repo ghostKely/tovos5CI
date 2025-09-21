@@ -27,6 +27,13 @@ class C_Annonce extends CI_Controller {
         $condition = [ 'idannonce' => $idAnnonce ];
         $data['detailAnnonce'] = $this->dao->select_where('v_annonce', $condition);     //detail concernant l'annonce
 
+        $idCandidat = $this->session->userdata('connectedUser')['idcandidat'];
+        $conditions = [
+            'idcandidat' => $idCandidat,
+            'idannonce' => $idAnnonce
+        ];
+        $data['qcm'] = $this->dao->select_where('v_detailqcm', $conditions);
+        
 		$this->load->view('home/Home', $data);                          //page principale où on load les pages
     }
 }

@@ -19,7 +19,7 @@
                     <span class="link-text">Liste Annonce</span>
                 </div>
             </a>
-            <a href="<?php echo base_url('C_Home')?>">
+            <a href="<?php echo base_url('annonce/C_Entretien/getInvoice')?>">
                 <div class="boutonnavbar">
                     <span class="glyphicon glyphicon-envelope icon" aria-hidden="true"></span>
                     <span class="link-text">Invoice</span>

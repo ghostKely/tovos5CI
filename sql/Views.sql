@@ -122,11 +122,6 @@ SELECT
     d.nomDiplome,
     d.ranking as niveau_diplome,
     
-    -- Informations du Contrat
-    b.idContrat,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
-    
     -- Informations du Poste
     b.idPoste,
     p.nomPoste,
@@ -145,7 +140,6 @@ LEFT JOIN BesoinValide bv ON b.idBesoin = bv.idBesoin
 -- Jointures avec toutes les tables de référence
 INNER JOIN Manager m ON b.idManager = m.idManager
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 -- Filtre pour les besoins non validés
@@ -163,8 +157,6 @@ SELECT
     b.nombre_employe,
     b.annee_experience, 
     di.nomDiplome,
-    c.typeContrat,
-    c.abreviation as type_contrat_abrev,
     bv.dateValidationRH,
     bv.checkrh,
     bv.checkdg,
@@ -174,7 +166,6 @@ INNER JOIN Besoin b ON bv.idBesoin = b.idBesoin
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Departement d ON p.id_departement = d.id_departement
 INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 WHERE bv.checkRH = TRUE AND bv.checkDG = FALSE;
 
 --  VIEW POUR AVOIR LA DERNIERE VALIDATION POUR UN BESOIN
@@ -218,8 +209,6 @@ SELECT
     b.description,
     b.nombre_employe,
     b.annee_experience,
-    c.typeContrat,
-    c.abreviation,
     bv.statutPostulation,
     dep.nomDepartement,
     bv.dateValidationRH,
@@ -235,10 +224,8 @@ INNER JOIN (
 ) bv ON b.idBesoin = bv.idBesoin
 INNER JOIN Poste p ON b.idPoste = p.idPoste
 INNER JOIN Diplome d ON b.id_diplome = d.id_diplome
-INNER JOIN Contrat c ON b.idContrat = c.idContrat
 INNER JOIN Departement dep ON p.id_departement = dep.id_departement
 WHERE bv.statutPostulation = FALSE;
-WHERE bv.checkRH = TRUE;
 
 
 -- View pour QCM 
@@ -254,7 +241,6 @@ SELECT
     b.datebesoin,
     b.idmanager,
     b.id_diplome,
-    b.idcontrat,
     b.idposte,
     r.idreponse,
     r.reponse,
@@ -262,3 +248,34 @@ SELECT
 FROM question q
 LEFT JOIN besoin b ON q.idbesoin = b.idbesoin
 LEFT JOIN reponse r ON q.idquestion = r.idquestion;
+
+CREATE OR REPLACE VIEW v_detailqcm
+AS
+SELECT 
+    nq.idNoteQcm,
+    nq.note,
+    nq.dateQcm,
+    c.idCandidat,
+    c.nom AS candidat_nom,
+    c.prenom AS candidat_prenom,
+    c.email AS candidat_email,
+    c.adresse AS candidat_adresse,
+    c.dtn AS candidat_naissance,
+    c.totalAnne_experience AS candidat_experience,
+    c.file_path AS candidat_cv,
+    c.datePostulation,
+    d.nomDiplome AS candidat_diplome,
+    d.ranking AS diplome_ranking,
+    a.idAnnonce,
+    a.titre AS annonce_titre,
+    a.datePublication AS annonce_date_pub,
+    b.idBesoin,
+    b.nombre_employe,
+    b.description AS besoin_description,
+    b.annee_experience AS besoin_experience,
+    b.dateBesoin
+FROM NoteQcm nq
+JOIN Candidat c ON nq.idCandidat = c.idCandidat
+LEFT JOIN Diplome d ON c.id_diplome = d.id_diplome
+JOIN Annonce a ON nq.idAnnonce = a.idAnnonce
+JOIN Besoin b ON a.idBesoin = b.idBesoin;
