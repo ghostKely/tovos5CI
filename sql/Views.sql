@@ -154,26 +154,26 @@ ORDER BY b.dateBesoin DESC;
 
 -- ================================================================================================= VIEW DG
 -- VIEW QUI DONNE LA LISTE DES BESOINS VALIDES PAR RH
-CREATE OR REPLACE VIEW v_besoindg AS
-SELECT 
-    b.idBesoin,
-    b.dateBesoin,
-    d.nomDepartement,
-    b.description,
-    p.nomPoste,
-    b.nombre_employe,
-    b.annee_experience, 
-    di.nomDiplome,
-    bv.dateValidationRH,
-    bv.checkrh,
-    bv.checkdg,
-    bv.averagenoteqcm
-FROM BesoinValide bv
-INNER JOIN Besoin b ON bv.idBesoin = b.idBesoin
-INNER JOIN Poste p ON b.idPoste = p.idPoste
-INNER JOIN Departement d ON p.id_departement = d.id_departement
-INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
-WHERE bv.checkRH = TRUE AND bv.checkDG = FALSE;
+-- CREATE OR REPLACE VIEW v_besoindg AS
+-- SELECT 
+--     b.idBesoin,
+--     b.dateBesoin,
+--     d.nomDepartement,
+--     b.description,
+--     p.nomPoste,
+--     b.nombre_employe,
+--     b.annee_experience, 
+--     di.nomDiplome,
+--     bv.dateValidationRH,
+--     bv.checkrh,
+--     bv.checkdg,
+--     bv.averagenoteqcm
+-- FROM BesoinValide bv
+-- INNER JOIN Besoin b ON bv.idBesoin = b.idBesoin
+-- INNER JOIN Poste p ON b.idPoste = p.idPoste
+-- INNER JOIN Departement d ON p.id_departement = d.id_departement
+-- INNER JOIN Diplome di ON b.id_diplome = di.id_diplome
+-- WHERE bv.checkRH = TRUE AND bv.checkDG = FALSE;
 
 --  VIEW POUR AVOIR LA DERNIERE VALIDATION POUR UN BESOIN
 CREATE OR REPLACE VIEW v_besoindg AS
@@ -223,6 +223,7 @@ SELECT
     bv.dateValidationRH,
     bv.dateValidationDG,
     bv.idBesoinValide,
+    bv.averagenoteqcm,
     b.idBesoin
 FROM Annonce a
 INNER JOIN Besoin b ON a.idBesoin = b.idBesoin
@@ -288,3 +289,118 @@ JOIN Candidat c ON nq.idCandidat = c.idCandidat
 LEFT JOIN Diplome d ON c.id_diplome = d.id_diplome
 JOIN Annonce a ON nq.idAnnonce = a.idAnnonce
 JOIN Besoin b ON a.idBesoin = b.idBesoin;
+
+    -- VIEW POUR AVOIR LA LISTE DES CANDIDATS AYANT UN ENTRETIEN
+    -- drop view v_candidatentretien;
+    CREATE OR REPLACE VIEW v_candidatentretien AS
+    SELECT 
+        c.idCandidat,
+        c.nom,
+        c.prenom,
+        c.email,
+        c.adresse,
+        c.dtn,
+        -- Diplôme du candidat
+        d_candidat.id_diplome,
+        d_candidat.nomDiplome AS diplome_candidat,
+        d_candidat.ranking AS ranking_diplome_candidat,
+        -- Diplôme requis pour l'annonce
+        d_requis.nomDiplome AS diplome_requis,
+        d_requis.ranking AS ranking_diplome_requis,
+        c.totalAnne_experience,
+        c.file_path,
+        c.datePostulation,
+        c.renseignement,
+        
+        -- Informations de l'entretien
+        e.idEntretien,
+        e.date_entretien,
+        
+        -- Informations de l'annonce
+        a.idAnnonce,
+        a.titre AS titre_annonce,
+        a.datePublication,
+        
+        -- Informations du besoin
+        b.idBesoin,
+        b.nombre_employe,
+        b.description,
+        b.annee_experience,
+        b.dateBesoin,
+        
+        -- Informations du poste
+        p.idPoste,
+        p.nomPoste,
+        
+        -- Informations du département
+        dep.id_departement,
+        dep.nomDepartement,
+        
+        -- Note QCM
+        nq.note,
+        COALESCE(nq.note, 0) AS note_qcm,
+        nq.dateQcm AS date_passation_qcm,
+
+        cr.idCandidatRefuse,
+        cr.libelle_etape,
+
+        es.idessai,
+        es.datedebut,
+        es.datefin,
+
+        rv.idrenouvellement,
+        rv.datedebut AS debutrenew,
+        rv.datefin AS finrenew,
+
+        emp.idemploye,
+        emp.date_embauche
+    FROM Candidat c
+    INNER JOIN Entretien e ON c.idCandidat = e.idCandidat
+    INNER JOIN Annonce a ON e.idAnnonce = a.idAnnonce
+    INNER JOIN Besoin b ON a.idBesoin = b.idBesoin
+    -- Diplôme du candidat
+    INNER JOIN Diplome d_candidat ON c.id_diplome = d_candidat.id_diplome
+    -- Diplôme requis pour le besoin (annonce)
+    INNER JOIN Diplome d_requis ON b.id_diplome = d_requis.id_diplome
+    INNER JOIN Poste p ON b.idPoste = p.idPoste
+    INNER JOIN Departement dep ON p.id_departement = dep.id_departement
+    LEFT JOIN NoteQcm nq ON (c.idCandidat = nq.idCandidat AND a.idAnnonce = nq.idAnnonce)
+    LEFT JOIN CandidatRefuse cr ON cr.idCandidat = c.idcandidat
+    LEFT JOIN Essai es ON es.idCandidat = c.idcandidat
+    LEFT JOIN Renouvellement rv ON rv.idCandidat = c.idcandidat
+    LEFT JOIN Employe emp ON emp.idCandidat = c.idcandidat
+    ORDER BY e.date_entretien DESC, c.nom, c.prenom;
+
+CREATE OR REPLACE VIEW v_employe AS
+SELECT 
+    e.idEmploye,
+    e.email AS email_employe,
+    e.nom,
+    e.prenom,
+    e.adresse,
+    e.dtn,
+    e.date_embauche,
+    
+    -- Informations du poste
+    p.idPoste,
+    p.nomPoste,
+    
+    -- Informations du département
+    d.id_departement,
+    d.nomDepartement,
+    
+    -- Informations du contrat
+    c.idContrat,
+    c.typeContrat,
+    c.abreviation,
+    
+    -- Informations du diplôme du candidat
+    dipl.id_diplome,
+    dipl.nomDiplome
+    
+FROM Employe e
+INNER JOIN Poste p ON e.idPoste = p.idPoste
+INNER JOIN Departement d ON p.id_departement = d.id_departement
+LEFT JOIN Contrat c ON e.idContrat = c.idContrat
+LEFT JOIN Diplome dipl ON e.id_diplome = dipl.id_diplome
+ORDER BY e.date_embauche DESC, e.nom, e.prenom;

@@ -1,5 +1,5 @@
     <div class="col-md-1 url">
-        <div class="logodiv"><img class="logo" src="<?php echo base_url('assets/image/logo.jpg'); ?>"></div>
+        <div class="logodiv"><img class="logo" src="<?php echo base_url('assets/image/ITULogo.jpg'); ?>"></div>
         <div class="scroll-container">
             <a href="<?php echo base_url('userLogin/C_User/disconnect')?>">
                 <div class="boutonnavbar">
@@ -20,7 +20,12 @@
                     <span class="link-text">Résultats QCM</span>
                 </div>
             </a>
-            
+            <a href="<?php echo base_url('employe/C_Employe/getListeEmploye')?>">
+                <div class="boutonnavbar">
+                    <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                    <span class="link-text">Employe</span>
+                </div>
+            </a>
             <div class="boutonnavbar" id="besoin" data-dropdown="dropdownMenubesoin">
                 <span class="glyphicon glyphicon-shopping-cart icon" aria-hidden="true"></span>
                 <span class="link-text">Besoins</span>
@@ -31,6 +36,34 @@
                         <div class="boutonnavbar">
                             <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
                             <span class="link-text">Liste avec QCM</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+                        
+            <div class="boutonnavbar" id="entretien" data-dropdown="dropdownMenuentretien">
+                <span class="glyphicon glyphicon-shopping-cart icon" aria-hidden="true"></span>
+                <span class="link-text">Entretien</span>
+                <span class="glyphicon glyphicon-menu-down down" aria-hidden="true"></span>
+            </div>
+                <div id="dropdownMenuentretien" class="dropdown-content">
+                    <a href="<?php echo base_url('annonce/C_Entretien/getListeCandidat')?>">
+                        <div class="boutonnavbar">
+                            <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                            <span class="link-text">Liste candidats</span>
+                        </div>
+                    </a>
+                    <a href="<?php echo base_url('essai/C_Essai/getListeEssai')?>">
+                        <div class="boutonnavbar">
+                            <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                            <span class="link-text">Liste essais</span>
+                        </div>
+                    </a>
+                    <a href="<?php echo base_url('essai/C_Renew/getListeRenew')?>">
+                        <div class="boutonnavbar">
+                            <span class="glyphicon glyphicon-list icon" aria-hidden="true"></span>
+                            <span class="link-text">Liste renouvellements</span>
                         </div>
                     </a>
                 </div>

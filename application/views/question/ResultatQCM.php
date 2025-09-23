@@ -49,9 +49,8 @@
         </div>
     <?php endif; ?>
     <h2>Liste des résultats QCM pour chaque besoins: </h2><br>
-    <h4>Entrez une date pour entretien: </h4>
-    <form action="<?php echo base_url('annonce/C_Entretien/ajoutEntretien') ?>" method="post">
-        <input type="date" name="dateentretien" id="" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
+    <h4> </h4>
+        
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -60,40 +59,32 @@
                     <th>Prenom Candidat</th>
                     <th>Note candidat</th>
                     <th>Date QCM</th>
+                    <th>Entrez une date pour entretien</th>
                 </tr>
             </thead>
         
             <tbody>
-                <?php foreach($resultats as $resultat): ?>
+                <?php for($i=0; $i<sizeof($resultats); $i++) { 
+                    $resultat = $resultats[$i]; ?>
+                    <form action="<?php echo base_url('annonce/C_Entretien/ajoutEntretien') ?>" method="post">
                     <tr class="ligne" data-href="">
                         <td><?= $resultat['annonce_titre'] ?></td>
                         <td><?= $resultat['candidat_nom'] ?></td>
                         <td><?= $resultat['candidat_prenom'] ?></td>
                         <td><?= $resultat['note'] ?></td>
                         <td><?= $resultat['dateqcm'] ?></td>
+                        <td><input type="date" name="dateentretien" id="" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required></td>
                         <td><input type="hidden" name="idnoteqcm" value="<?= $resultat['idnoteqcm'] ?>"></td>
-                        <?php if($resultat['waiting']):?>
+                        <td><input type="hidden" name="idannonce" value="<?= $resultat['idannonce'] ?>"></td>
+                        <td><input type="hidden" name="idcandidat" value="<?= $resultat['idcandidat'] ?>"></td>
+                        <?php if($qcmWaiting[$i]) { ?>
                             <td><div class="div-entretien">Entretien envoyé</div></td>
-                        <?php else: ?>
+                        <?php } else { ?>
                             <td><button class="entretien-btn" type="submit">Donner entretien</button></td>
-                        <?php endif;?>    
+                        <?php } ?>    
                     </tr>
-                <?php endforeach; ?>
+                    </form>
+                <?php } ?>
             </tbody>
         </table>
-    </form>
 <?php $this->load->view('component/validation/Validation'); ?>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Sélectionner toutes les lignes de table avec l'attribut data-href
-            var rows = document.querySelectorAll('.ligne[data-href]');
-
-            rows.forEach(function(row) {
-                row.addEventListener('click', function() {
-                    // Rediriger vers l'URL stockée dans l'attribut data-href
-                    window.location.href = this.getAttribute('data-href');
-                });
-            });
-        });
-    </script>  

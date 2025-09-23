@@ -1,5 +1,5 @@
     <div class="col-md-1 url">
-        <div class="logodiv"><img class="logo" src="<?php echo base_url('assets/image/logo.jpg'); ?>"></div>
+        <div class="logodiv"><img class="logo" src="<?php echo base_url('assets/image/ITULogo.jpg'); ?>"></div>
         <div class="scroll-container">
             <a href="<?php echo base_url('userLogin/C_User/disconnect')?>">
                 <div class="boutonnavbar">
